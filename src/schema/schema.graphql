@@ -1,0 +1,178 @@
+schema {
+  query: RootQueryType
+}
+
+type Direction implements Node {
+  # The ID of an object
+  id: ID!
+  displayOrder: Int
+  text: String
+}
+
+# A connection to a list of items.
+type DirectionConnectionConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [DirectionConnectionEdge]
+}
+
+# An edge in a connection.
+type DirectionConnectionEdge {
+  # The item at the end of the edge
+  node: Direction
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type DirectionSet implements Node {
+  # The ID of an object
+  id: ID!
+  directions(after: String, first: Int, before: String, last: Int): DirectionConnectionConnection
+  displayOrder: Int
+  title: String
+}
+
+# A connection to a list of items.
+type DirectionSetConnectionConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [DirectionSetConnectionEdge]
+}
+
+# An edge in a connection.
+type DirectionSetConnectionEdge {
+  # The item at the end of the edge
+  node: DirectionSet
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type Ingredient implements Node {
+  # The ID of an object
+  id: ID!
+  displayOrder: Int
+  text: String
+}
+
+# A connection to a list of items.
+type IngredientConnectionConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [IngredientConnectionEdge]
+}
+
+# An edge in a connection.
+type IngredientConnectionEdge {
+  # The item at the end of the edge
+  node: Ingredient
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type IngredientSet implements Node {
+  # The ID of an object
+  id: ID!
+  displayOrder: Int
+  ingredients(after: String, first: Int, before: String, last: Int): IngredientConnectionConnection
+  title: String
+}
+
+# A connection to a list of items.
+type IngredientSetConnectionConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [IngredientSetConnectionEdge]
+}
+
+# An edge in a connection.
+type IngredientSetConnectionEdge {
+  # The item at the end of the edge
+  node: IngredientSet
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+type Recipe implements Node {
+  # The ID of an object
+  id: ID!
+  activeTime: String
+  description: String
+  directionSets(after: String, first: Int, before: String, last: Int): DirectionSetConnectionConnection
+  favorite: Boolean
+  imageUrl: String
+  ingredientSets(after: String, first: Int, before: String, last: Int): IngredientSetConnectionConnection
+  note: String
+  originalUrl: String
+  servings: String
+  source: String
+  title: String
+  totalTime: String
+}
+
+# A connection to a list of items.
+type RecipeConnectionConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [RecipeConnectionEdge]
+}
+
+# An edge in a connection.
+type RecipeConnectionEdge {
+  # The item at the end of the edge
+  node: Recipe
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type RootQueryType {
+  # Fetches an object given its ID
+  node(
+    # The ID of an object
+    id: ID!
+  ): Node
+  recipe(id: ID!): Recipe
+  users: [User]
+  viewer(token: String!): User
+}
+
+type User implements Node {
+  # The ID of an object
+  id: ID!
+  recipes(after: String, first: Int, before: String, last: Int): RecipeConnectionConnection
+}

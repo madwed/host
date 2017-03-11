@@ -2,7 +2,11 @@ import Sequelize from 'sequelize';
 
 export default (sequelize) => {
   const IngredientSet = sequelize.define('ingredientSets', {
-    id: { type: Sequelize.UUID, primaryKey: true },
+    id: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      primaryKey: true,
+    },
     recipeId: {
       type: Sequelize.UUID,
       references: {
@@ -18,6 +22,9 @@ export default (sequelize) => {
         models.IngredientSet.hasMany(models.Ingredient);
         models.IngredientSet.belongsTo(models.Recipe);
       },
+    },
+    instanceMethods: {
+      getClassName: () => 'IngredientSet',
     },
   });
 

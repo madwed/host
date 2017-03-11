@@ -3,9 +3,15 @@
 module.exports = {
   up: function (queryInterface, Sequelize) {
     return queryInterface.createTable('ingredients', {
-      id: { type: Sequelize.UUID, primaryKey: true },
+      id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true
+      },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE,
       ingredientSetId: {
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
         references: {
           model: 'ingredientSets',
           key: 'id',

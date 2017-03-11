@@ -2,7 +2,7 @@
 
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    return queryInterface.createTable('directionSets', {
+    return queryInterface.createTable('users', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -10,19 +10,14 @@ module.exports = {
       },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
-      recipeId: {
-        type: Sequelize.UUID,
-        references: {
-          model: 'recipes',
-          key: 'id',
-        },
-      },
-      displayOrder: Sequelize.INTEGER,
-      title: Sequelize.TEXT,
+      firstName: Sequelize.TEXT,
+      lastName: Sequelize.TEXT,
+      email: Sequelize.TEXT,
+      googleId: Sequelize.TEXT,
     });
   },
 
   down: function (queryInterface, Sequelize) {
-    return queryInterface.dropTable('directionSets');
+    return queryInterface.dropTable('users');
   }
 };

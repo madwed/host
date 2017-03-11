@@ -2,7 +2,11 @@ import Sequelize from 'sequelize';
 
 export default (sequelize) => {
   const Direction = sequelize.define('directions', {
-    id: { type: Sequelize.UUID, primaryKey: true },
+    id: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      primaryKey: true,
+    },
     directionSetId: {
       type: Sequelize.UUID,
       references: {
@@ -17,6 +21,9 @@ export default (sequelize) => {
       associate: (models) => {
         models.Direction.belongsTo(models.DirectionSet);
       },
+    },
+    instanceMethods: {
+      getClassName: () => 'Direction',
     },
   });
 

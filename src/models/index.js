@@ -3,13 +3,14 @@
 import Sequelize from 'sequelize';
 import path from 'path';
 
-import configOptions from '../config/config.json';
+import configOptions from '../../config/config.json';
 
-import Direction from './models/direction';
-import DirectionSet from './models/direction-set';
-import Ingredient from './models/ingredient';
-import IngredientSet from './models/ingredient-set';
-import Recipe from './models/recipe';
+import Direction from './direction';
+import DirectionSet from './direction-set';
+import Ingredient from './ingredient';
+import IngredientSet from './ingredient-set';
+import Recipe from './recipe';
+import User from './user';
 
 const env = process.env.NODE_ENV || 'development';
 const config = configOptions[env];
@@ -24,6 +25,7 @@ const models = {
   Ingredient,
   IngredientSet,
   Recipe,
+  User,
 };
 
 Object.keys(models).forEach(modelName => {

@@ -5,8 +5,11 @@ module.exports = {
     return queryInterface.createTable('recipes', {
       id: {
         type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE,
       activeTime: Sequelize.TEXT,
       description: Sequelize.TEXT,
       favorite: Sequelize.BOOLEAN,
@@ -23,6 +26,13 @@ module.exports = {
         },
       },
       totalTime: Sequelize.TEXT,
+      userId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
+      },
     });
   },
 

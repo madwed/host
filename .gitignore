@@ -1,4 +1,9 @@
-/build
+.DS_Store
+.idea/
 
 /node_modules
 npm-debug.log
+npm-debug.log.*
+
+/build
+data/schema.graphql
