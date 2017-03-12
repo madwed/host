@@ -64,7 +64,8 @@ const IngredientSet = new GraphQLObjectType({
       args: connectionArgs,
       resolve(ingredientSet, args) {
         return db.Ingredient.findAll({
-          where: { ingredientSetId: ingredientSet.id }
+          where: { ingredientSetId: ingredientSet.id },
+          order: '"displayOrder"',
         }).then((ingredients) => connectionFromArray(ingredients, args));
       }
     },
@@ -86,7 +87,8 @@ const DirectionSet = new GraphQLObjectType({
       args: connectionArgs,
       resolve(directionSet, args) {
         return db.Direction.findAll({
-          where: { directionSetId: directionSet.id }
+          where: { directionSetId: directionSet.id },
+          order: '"displayOrder"',
         }).then((directions) => connectionFromArray(directions, args));
       }
     },
@@ -115,7 +117,8 @@ const Recipe = new GraphQLObjectType({
       args: connectionArgs,
       resolve(recipe, args) {
         return db.DirectionSet.findAll({
-          where: { recipeId: recipe.id }
+          where: { recipeId: recipe.id },
+          order: '"displayOrder"',
         }).then((directionSets) => connectionFromArray(directionSets, args));
       }
     },
@@ -126,7 +129,8 @@ const Recipe = new GraphQLObjectType({
       args: connectionArgs,
       resolve(recipe, args) {
         return db.IngredientSet.findAll({
-          where: { recipeId: recipe.id }
+          where: { recipeId: recipe.id },
+          order: '"displayOrder"',
         }).then((ingredientSets) => connectionFromArray(ingredientSets, args));
       }
     },
@@ -144,10 +148,21 @@ const { connectionType: RecipeConnection } = connectionDefinitions({
   name: 'RecipeConnection',
   nodeType: Recipe,
 });
+
 const User = new GraphQLObjectType({
   name: 'User',
   fields: {
     id: globalIdField('User'),
+    recipe: {
+      type: Recipe,
+      args: {
+        globalId: { type: GraphQLString },
+      },
+      resolve(parent, { globalId }) {
+        const { type, id } = fromGlobalId(globalId);
+        return db.Recipe.findById(id);
+      }
+    },
     recipes: {
       type: RecipeConnection,
       args: connectionArgs,
@@ -174,24 +189,6 @@ export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQueryType',
     fields: () => ({
-      node: nodeField,
-      recipe: {
-        type: Recipe,
-        args: {
-          id: {
-            type: new GraphQLNonNull(GraphQLID),
-          },
-        },
-        resolve(parent, { id }) {
-          return db.Recipe.findById(id);
-        }
-      },
-      users: {
-        type: new GraphQLList(User),
-        resolve() {
-          return db.User.findAll();
-        }
-      },
       viewer: {
         type: User,
         args: {

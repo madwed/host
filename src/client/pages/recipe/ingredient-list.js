@@ -1,18 +1,26 @@
 import React from 'react';
+import Relay from 'react-relay';
 import { css } from 'glamor';
 
-const sort = (list) => list.sort((a, b) => a.displayOrder - b.displayOrder);
-
-export default function IngredientList ({ data }) {
+function IngredientList ({
+  recipe: { activeTime, ingredientSets, servings, totalTime }
+}) {
   return (
     <div { ...styles.container }>
+      <p>{ activeTime }</p>
+      <p>{ totalTime }</p>
+      <p>{ servings }</p>
       {
-        sort(data).map((list) => (
-          <div>
+        ingredientSets.edges.map(({ node: setNode }) => (
+          <div key={ setNode.id }>
+            <div { ...styles.setTitle }>{ setNode.title }</div>
             {
-              sort(list.ingredients).map((ing) => (
-                <div { ...styles.ingredient }>
-                  { `${ing.quantity} ${ing.text}` }
+              setNode.ingredients.edges.map(({ node }) => (
+                <div
+                  { ...styles.ingredient }
+                  key={ node.id }
+                >
+                  { `${node.text}` }
                 </div>
               ))
             }
@@ -25,10 +33,43 @@ export default function IngredientList ({ data }) {
 
 const styles = {
   container: css({
-    width: '25%',
+    width: '33%',
     padding: '1em',
   }),
   ingredient: css({
     padding: '0.25em 0em',
   }),
+  setTitle: css({
+    fontSize: '1.25em',
+    paddingTop: '0.5em',
+    paddingBottom: '0.25em',
+  }),
 };
+
+export default Relay.createContainer(IngredientList, {
+  fragments: {
+    recipe: () => Relay.QL`
+      fragment on Recipe {
+        activeTime
+        servings
+        totalTime
+        ingredientSets(first: 100) {
+          edges {
+            node {
+              id
+              title
+              ingredients(first: 100) {
+                edges {
+                  node {
+                    id
+                    text
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+  },
+});

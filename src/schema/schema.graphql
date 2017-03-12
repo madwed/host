@@ -161,18 +161,12 @@ type RecipeConnectionEdge {
 }
 
 type RootQueryType {
-  # Fetches an object given its ID
-  node(
-    # The ID of an object
-    id: ID!
-  ): Node
-  recipe(id: ID!): Recipe
-  users: [User]
   viewer(token: String!): User
 }
 
 type User implements Node {
   # The ID of an object
   id: ID!
+  recipe(globalId: String): Recipe
   recipes(after: String, first: Int, before: String, last: Int): RecipeConnectionConnection
 }

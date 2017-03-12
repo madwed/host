@@ -5,6 +5,7 @@ import cookie from 'js-cookie';
 
 import Layout from './pages/layout';
 import Login from './pages/login';
+import Recipe from './pages/recipe';
 import Recipes from './pages/recipes';
 
 const viewerQuery = {
@@ -43,6 +44,23 @@ export default class Routes extends Component {
           <IndexRoute
             component={ Recipes }
             prepareParams={ () => ({ token }) }
+            queries={ viewerQuery }
+          />
+
+          <Route
+            component={ Recipes }
+            path="/recipes"
+            prepareParams={ () => ({ token }) }
+            queries={ viewerQuery }
+          />
+
+          <Route
+            component={ Recipe }
+            path="/recipes/:id"
+            prepareParams={ (params, props) => {
+              const { id } = params;
+              return { id, token };
+            } }
             queries={ viewerQuery }
           />
         </Route>

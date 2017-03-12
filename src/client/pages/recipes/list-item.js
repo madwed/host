@@ -5,14 +5,13 @@ import { DARKER_TERTIARY, LIGHTEST_TERTIARY } from '../../palette';
 
 export default function ListItem ({
   description,
-  id,
   imageUrl,
   onClick,
   source,
   title,
 }) {
   return (
-    <div { ...styles.container } onClick={ () => onClick(id) }>
+    <div { ...styles.container } onClick={ onClick }>
       <div { ...styles.imageContainer }>
         <img { ...styles.image } src={ imageUrl }/>
       </div>
@@ -38,7 +37,8 @@ export default function ListItem ({
 const styles = {
   container: css({
     display: 'flex',
-    padding: '0.25em 2em',
+    alignItems: 'center',
+    padding: '0.5em 2em 0.25em',
     cursor: 'pointer',
     ':hover': {
       backgroundColor: LIGHTEST_TERTIARY,

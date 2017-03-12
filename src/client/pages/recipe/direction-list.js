@@ -1,17 +1,22 @@
 import React from 'react';
+import Relay from 'react-relay';
 import { css } from 'glamor';
 
-const sort = (list) => list.sort((a, b) => a.displayOrder - b.displayOrder);
-
-export default function DirectionList ({ data }) {
+function DirectionList ({ recipe: { directionSets } }) {
   return (
     <div { ...styles.container }>
       {
-        sort(data).map((list) => (
-          <div>
+        directionSets.edges.map(({ node: setNode }) => (
+          <div key={ setNode.id }>
+            <div { ...styles.setTitle }>{ setNode.title }</div>
             {
-              sort(list.directions).map((dir) => (
-                <div { ...styles.direction }>{ dir.text }</div>
+              setNode.directions.edges.map(({ node }) => (
+                <div
+                  key={ node.id }
+                  { ...styles.direction }
+                >
+                  { node.text }
+                </div>
               ))
             }
           </div>
@@ -23,10 +28,39 @@ export default function DirectionList ({ data }) {
 
 const styles = {
   container: css({
-    width: '75%',
+    width: '66%',
     padding: '1em',
   }),
   direction: css({
     padding: '0.5em 0em',
   }),
+  setTitle: css({
+    fontSize: '1.25em',
+    paddingTop: '0.5em',
+  }),
 };
+
+export default Relay.createContainer(DirectionList, {
+  fragments: {
+    recipe: () => Relay.QL`
+      fragment on Recipe {
+        directionSets(first: 100) {
+          edges {
+            node {
+              id
+              title
+              directions(first: 100) {
+                edges {
+                  node {
+                    id
+                    text
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+  },
+});

@@ -1,33 +1,24 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import Relay from 'react-relay';
 import { css } from 'glamor';
 
 import DirectionList from './direction-list';
 import Header from './header';
 import IngredientList from './ingredient-list';
 
-import changeToRecipes from '../../actions/change-to-recipes';
-
 const sort = (list) => list.sort((a, b) => a.displayOrder - b.displayOrder);
 
 class Recipe extends Component {
   render() {
-    const { recipe } = this.props;
-
-    if (!recipe) { return <div/>; }
+    const { viewer: { recipe } } = this.props;
 
     return (
       <div { ...styles.container }>
-        <Header
-          changeToRecipes={ this.props.changeToRecipes }
-          servings={ recipe.yield }
-          source={ recipe.source }
-          title={ recipe.title }
-        />
+        <Header recipe={ recipe }/>
 
         <div { ...styles.details }>
-          <IngredientList data={ recipe.ingredientLists }/>
-          <DirectionList data={ recipe.directionLists }/>
+          <IngredientList recipe={ recipe }/>
+          <DirectionList recipe={ recipe }/>
         </div>
       </div>
     );
@@ -45,10 +36,25 @@ const styles = {
   }),
 };
 
-const mapState = () => {};
+export default Relay.createContainer(Recipe, {
+  initialVariables: {
+    id: null,
+  },
 
-const mapActions = {
-  changeToRecipes,
-};
+  prepareVariables({ id }) {
+    return { id };
+  },
 
-export default connect(mapState, mapActions)(Recipe);
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on User {
+        recipe(globalId: $id) {
+          ${Header.getFragment('recipe')}
+          ${DirectionList.getFragment('recipe')}
+          ${IngredientList.getFragment('recipe')}
+        }
+      }
+    `,
+  },
+});
+

@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import Relay from 'react-relay';
+import { browserHistory } from 'react-router';
 
 import ListItem from './list-item';
 
 class Recipes extends Component {
+  changeToRecipe = (id) => {
+    browserHistory.push(`/recipes/${id}`);
+  }
+
   render() {
     const { viewer: { recipes: { edges = [] } } } = this.props;
     const recipes = edges.map((edge) => edge.node);
@@ -17,7 +22,7 @@ class Recipes extends Component {
               id={ recipe.id }
               imageUrl={ recipe.imageUrl }
               key={ recipe.id }
-              onClick={ this.props.changeToRecipe }
+              onClick={ () => this.changeToRecipe(recipe.id) }
               source={ recipe.source || ''}
               title={ recipe.title }
             />

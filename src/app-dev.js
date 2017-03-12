@@ -96,6 +96,11 @@ function startAppServer(callback) {
           });
         }
       );
+
+      const routes = /^(?!.*\.js$|\/graphql.*$)/;
+      app.get(routes, (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+      });
     },
     proxy: { '/graphql': `http://localhost:${GRAPHQL_PORT}` },
     publicPath: '/client/',
@@ -155,7 +160,7 @@ function startServers(callback) {
     startAppServer(handleTaskDone);
   });
 }
-const watcher = chokidar.watch('.', {
+const watcher = chokidar.watch('./data/{database,schema}.js', {
   ignored: /\.(json|graphql)/
 });
 watcher.on('change', path => {

@@ -25,6 +25,7 @@
     "lodash.sample": "^4.2.1",
     "lodash.times": "^4.3.2",
     "node-fetch": "^1.6.3",
+    "normalize.css": "^5.0.0",
     "pg": "^6.1.2",
     "pg-hstore": "^2.3.2",
     "react": "^15.4.2",
