@@ -6,6 +6,7 @@ import db from '../../src/models';
 
 Factory.define('ingredient').attrs({
   displayOrder: undefined,
+  quantity: () => (Math.random() * 10).toFixed(1),
   text: faker.company.catchPhrase,
 });
 

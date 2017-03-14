@@ -15,6 +15,7 @@ export default (sequelize) => {
       },
     },
     displayOrder: Sequelize.INTEGER,
+    quantity: Sequelize.FLOAT,
     text: Sequelize.TEXT,
   }, {
     classMethods: {

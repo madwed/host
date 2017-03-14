@@ -3,6 +3,7 @@ import Relay from 'react-relay';
 import { IndexRoute, Route, Router } from 'react-router';
 import cookie from 'js-cookie';
 
+import EditRecipe from './pages/edit-recipe';
 import Layout from './pages/layout';
 import Login from './pages/login';
 import Recipe from './pages/recipe';
@@ -16,6 +17,11 @@ export default class Routes extends Component {
   constructor(props) {
     super(props);
     this.state = { token: cookie.get('cooks-token') };
+  }
+
+  clearToken = () => {
+    cookie.remove('cooks-token');
+    this.setState({ token: null });
   }
 
   setToken = ({ token }) => {
@@ -40,7 +46,13 @@ export default class Routes extends Component {
         history={ history }
         render={ render }
       >
-        <Route path="/" component={ Layout }>
+        <Route
+          component={ Layout }
+          logout={ this.clearToken }
+          path="/"
+          prepareParams={ () => ({ token }) }
+          queries={ viewerQuery }
+        >
           <IndexRoute
             component={ Recipes }
             prepareParams={ () => ({ token }) }
@@ -57,6 +69,16 @@ export default class Routes extends Component {
           <Route
             component={ Recipe }
             path="/recipes/:id"
+            prepareParams={ (params, props) => {
+              const { id } = params;
+              return { id, token };
+            } }
+            queries={ viewerQuery }
+          />
+
+          <Route
+            component={ EditRecipe }
+            path="/recipes/:id/edit"
             prepareParams={ (params, props) => {
               const { id } = params;
               return { id, token };

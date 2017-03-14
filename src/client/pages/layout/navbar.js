@@ -41,6 +41,7 @@ const styles = {
     borderTop: `2px solid ${LIGHTER_PRIMARY}`,
     borderBottom: `2px solid ${DARKEST_PRIMARY}`,
     color: WHITE,
+    zIndex: 99,
   }),
   navplaceholder: css({
     height: 'calc(4em + 4px)',

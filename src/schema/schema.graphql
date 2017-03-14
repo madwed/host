@@ -57,6 +57,7 @@ type Ingredient implements Node {
   # The ID of an object
   id: ID!
   displayOrder: Int
+  quantity: Float
   text: String
 }
 
@@ -167,6 +168,6 @@ type RootQueryType {
 type User implements Node {
   # The ID of an object
   id: ID!
-  recipe(globalId: String): Recipe
+  recipe(id: String): Recipe
   recipes(after: String, first: Int, before: String, last: Int): RecipeConnectionConnection
 }

@@ -1,30 +1,19 @@
 import React, { Component } from 'react';
 import Relay from 'react-relay';
-import { browserHistory } from 'react-router';
 
 import ListItem from './list-item';
 
 class Recipes extends Component {
-  changeToRecipe = (id) => {
-    browserHistory.push(`/recipes/${id}`);
-  }
-
   render() {
-    const { viewer: { recipes: { edges = [] } } } = this.props;
-    const recipes = edges.map((edge) => edge.node);
+    const { viewer: { recipes } } = this.props;
 
     return (
       <div>
         {
-          recipes.sort((a, b) => a.title < b.title ? -1 : 1).map((recipe) => (
+          recipes.edges.map(({ node }) => (
             <ListItem
-              description={ recipe.description || ''}
-              id={ recipe.id }
-              imageUrl={ recipe.imageUrl }
-              key={ recipe.id }
-              onClick={ () => this.changeToRecipe(recipe.id) }
-              source={ recipe.source || ''}
-              title={ recipe.title }
+              key={ node.id }
+              recipe={ node }
             />
           ))
         }
@@ -41,10 +30,7 @@ export default Relay.createContainer(Recipes, {
           edges {
             node {
               id
-              description
-              imageUrl
-              source
-              title
+              ${ListItem.getFragment('recipe')}
             }
           }
         }

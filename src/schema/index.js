@@ -1,5 +1,6 @@
 import {
   GraphQLBoolean,
+  GraphQLFloat,
   GraphQLID,
   GraphQLInt,
   GraphQLList,
@@ -35,6 +36,7 @@ const Ingredient = new GraphQLObjectType({
   fields: {
     id: globalIdField('Ingredient'),
     displayOrder: { type: GraphQLInt },
+    quantity: { type: GraphQLFloat },
     text: { type: GraphQLString },
   },
   interfaces: [nodeInterface],
@@ -156,11 +158,11 @@ const User = new GraphQLObjectType({
     recipe: {
       type: Recipe,
       args: {
-        globalId: { type: GraphQLString },
+        id: { type: GraphQLString },
       },
-      resolve(parent, { globalId }) {
+      resolve(user, { id: globalId }) {
         const { type, id } = fromGlobalId(globalId);
-        return db.Recipe.findById(id);
+        return db.Recipe.findOne({ where: { userId: user.id, id } });
       }
     },
     recipes: {
@@ -197,7 +199,7 @@ export default new GraphQLSchema({
         resolve(parent, { token }) {
           const decodedToken = jwt.decode(token, process.env.APP_SECRET);
           const { googleId } = decodedToken;
-          return db.User.findOne({ where: { googleId } });
+          return db.User.findByGoogleId(googleId);
         }
       }
     }),

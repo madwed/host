@@ -7,9 +7,9 @@ function IngredientList ({
 }) {
   return (
     <div { ...styles.container }>
-      <p>{ activeTime }</p>
-      <p>{ totalTime }</p>
-      <p>{ servings }</p>
+      <p>Active Time: { activeTime }</p>
+      <p>Total Time: { totalTime }</p>
+      <p>Servings: { servings }</p>
       {
         ingredientSets.edges.map(({ node: setNode }) => (
           <div key={ setNode.id }>
@@ -20,7 +20,7 @@ function IngredientList ({
                   { ...styles.ingredient }
                   key={ node.id }
                 >
-                  { `${node.text}` }
+                  { [node.quantity, node.text].filter(Boolean).join(' ') }
                 </div>
               ))
             }
@@ -62,6 +62,7 @@ export default Relay.createContainer(IngredientList, {
                 edges {
                   node {
                     id
+                    quantity
                     text
                   }
                 }

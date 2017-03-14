@@ -9,10 +9,17 @@ class Layout extends Component {
     this.state = { recipeId: '' };
   }
 
-  openRecipe = () => {
+  componentWillMount() {
+    if (!this.props.viewer) {
+      this.props.route.logout();
+    }
   }
 
   render() {
+    if (!this.props.viewer) {
+      return <div/>;
+    }
+
     return (
       <div>
         <Navbar/>
@@ -22,4 +29,12 @@ class Layout extends Component {
   }
 }
 
-export default Relay.createContainer(Layout, { fragments: {} });
+export default Relay.createContainer(Layout, {
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on User {
+        id
+      }
+    `,
+  },
+});

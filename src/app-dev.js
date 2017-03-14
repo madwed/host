@@ -65,7 +65,7 @@ function startAppServer(callback) {
             const googleId = body.sub;
             if (googleId) {
               return Promise.all([
-                db.User.findOrInitialize({ where: { googleId } }),
+                db.User.findOrCreate({ where: { googleId } }),
                 body
               ]);
             } else {

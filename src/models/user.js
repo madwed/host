@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import db from './';
 
 export default (sequelize) => {
   const User = sequelize.define('users', {
@@ -15,6 +16,15 @@ export default (sequelize) => {
     classMethods: {
       associate: (models) => {
         models.User.hasMany(models.Recipe);
+      },
+      findByGoogleId: (googleId) => {
+        return db.User.findOne({ where: { googleId } }).then((user) => {
+          if (!user) { return null; }
+          return user;
+        }).catch((err) => {
+          console.log('Error finding User by googleId');
+          return null;
+        });
       },
     },
     instanceMethods: {

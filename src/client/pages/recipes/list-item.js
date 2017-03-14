@@ -1,17 +1,17 @@
 import React from 'react';
+import Relay from 'react-relay';
 import { css } from 'glamor';
+import { browserHistory } from 'react-router';
 
 import { DARKER_TERTIARY, LIGHTEST_TERTIARY } from '../../palette';
 
-export default function ListItem ({
-  description,
-  imageUrl,
-  onClick,
-  source,
-  title,
-}) {
+const changeToRecipe = (id) => {
+  browserHistory.push(`/recipes/${id}`);
+};
+
+function ListItem ({ recipe: { description, id, imageUrl, source, title } }) {
   return (
-    <div { ...styles.container } onClick={ onClick }>
+    <div { ...styles.container } onClick={ () => changeToRecipe(id) }>
       <div { ...styles.imageContainer }>
         <img { ...styles.image } src={ imageUrl }/>
       </div>
@@ -72,3 +72,17 @@ const styles = {
     fontSize: '0.75em',
   }),
 };
+
+export default Relay.createContainer(ListItem, {
+  fragments: {
+    recipe: () => Relay.QL`
+      fragment on Recipe  {
+        id
+        description
+        imageUrl
+        source
+        title
+      }
+    `,
+  },
+});
