@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router';
 import merge from 'lodash.merge';
 
 import Header from './header';
-import IngredientList from './ingredient-list';
+import IngredientLists from './ingredient-lists';
 
 import UpdateRecipeMutation from '../../mutations/update-recipe-mutation';
 
@@ -33,7 +33,7 @@ class EditRecipe extends Component {
         <Header recipe={ recipe } ref="header"/>
 
         <div { ...styles.details }>
-          <IngredientList recipe={ recipe } ref="ingredientList"/>
+          <IngredientLists recipe={ recipe } ref="ingredientLists"/>
         </div>
       </div>
     );
@@ -66,7 +66,7 @@ export default Relay.createContainer(EditRecipe, {
         recipe(id: $id) {
           id
           ${Header.getFragment('recipe')}
-          ${IngredientList.getFragment('recipe')}
+          ${IngredientLists.getFragment('recipe')}
           ${UpdateRecipeMutation.getFragment('recipe')}
         }
       }

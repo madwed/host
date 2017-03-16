@@ -4,10 +4,10 @@ import Paper from 'material-ui/Paper';
 
 import { LIGHTEST_PRIMARY } from '../palette';
 
-export default function Section ({ children }) {
+export default function Section ({ children, style = {} }) {
   return (
     <Paper style={ styles.paper }>
-      <div { ...styles.section }>
+      <div { ...styles.section } { ...style }>
         { children }
       </div>
     </Paper>

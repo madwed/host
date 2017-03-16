@@ -1,114 +1,98 @@
-import React, { Component } from 'react';
-import Relay from 'react-relay';
+import React from 'react';
 import { css } from 'glamor';
-import merge from 'lodash.merge';
 
-import Divider from 'material-ui/Divider';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 
-import Section from '../../components/section';
-import { LIGHTEST_PRIMARY } from '../../palette';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
-class IngredientList extends Component {
-  constructor(props) {
-    super(props);
+import { DANGER } from '../../palette';
 
-    const { recipe: { activeTime, ingredientSets, servings, totalTime } } = props;
+export default function IngredientList ({
+  list,
+  onDelete,
+  onIngredientChange,
+  onSetChange,
+  setIndex,
+}) {
+  const { title, ingredients } = list;
 
-    this.state = {
-      activeTime,
-      ingredientSets: ingredientSets.edges.map(({ node: setNode }) => {
-        return {
-          id: setNode.id,
-          ingredients: setNode.ingredients.edges.map(({ node }) => {
-            return {
-              id: node.id,
-              quantity: node.quantity,
-              text: node.text,
-            };
-          }),
-          title: setNode.title,
-        };
-      }),
-      servings,
-      totalTime,
-    };
-  }
+  return (
+    <div { ...styles.container }>
+      <div { ...styles.closeButtonContainer }>
+        <IconButton
+          iconStyle={ styles.delete }
+          onClick={ () => onDelete(setIndex) }
+          tooltip="Delete Section"
+        >
+          <NavigationClose/>
+        </IconButton>
+      </div>
 
-  onChange = ({ field, value }) => {
-    this.setState({ [field]: value });
-  }
-
-  getFields = () => {
-    return { recipe: this.state };
-  }
-
-  render() {
-    const { activeTime, ingredientSets, totalTime, servings } = this.state;
-    return (
-      <div { ...styles.container }>
-        <Section>
-          <TextField
-            floatingLabelText="Active Time"
-            fullWidth={ true }
-            onChange={
-              (e, value) => this.onChange({ value, field: 'activeTime' })
-            }
-            value={ activeTime }
-          />
-          <TextField
-            floatingLabelText="Total Time"
-            fullWidth={ true }
-            onChange={
-              (e, value) => this.onChange({ value, field: 'totalTime' })
-            }
-            value={ totalTime }
-          />
-          <TextField
-            floatingLabelText="Servings"
-            fullWidth={ true }
-            onChange={
-              (e, value) => this.onChange({ value, field: 'servings' })
-            }
-            value={ servings }
-          />
-        </Section>
+      <div { ...styles.set }>
+        <TextField
+          floatingLabelText="Section Title"
+          fullWidth={ true }
+          onChange={ (e, value) => onSetChange({
+            index: setIndex, value, field: 'title',
+          }) }
+          value={ title }
+        />
 
         {
-          ingredientSets.map(({ id: setId, ingredients, title }, setIndex) => (
-            <Section key={ setId }>
+          ingredients.map(({ id, quantity, text }, index) => (
+            <div { ...styles.ingredientContainer } key={ id }>
               <TextField
-                defaultValue={ title }
-                floatingLabelText="Section Title"
-                fullWidth={ true }
+                floatingLabelText="Quantity"
+                onChange={ (e, value) => onIngredientChange({
+                  setIndex, index, value, field: 'quantity',
+                }) }
+                style={ styles.quantityField }
+                value={ quantity }
               />
-              {
-                ingredients.map(({ id, quantity, text }, index) => (
-                  <div { ...styles.ingredientContainer } key={ id }>
-                    <TextField
-                      defaultValue={ quantity }
-                      floatingLabelText="Quantity"
-                      style={ styles.quantityField }
-                    />
-                    <TextField
-                      className={ `${styles.ingredientField}` }
-                      defaultValue={ text }
-                      floatingLabelText="Ingredient"
-                    />
-                  </div>
-                ))
-              }
-            </Section>
+              <TextField
+                className={ `${styles.ingredientField}` }
+                floatingLabelText="Ingredient"
+                onChange={ (e, value) => onIngredientChange({
+                  setIndex, index, value, field: 'text',
+                }) }
+                value={ text }
+              />
+            </div>
           ))
         }
+
+        <div { ...styles.buttonContainer }>
+          <FloatingActionButton
+            mini={ true }
+            zDepth={ 1 }
+          >
+            <ContentAdd/>
+          </FloatingActionButton>
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 const styles = {
   container: css({
-    width: '33%',
+    padding: '1em 0em 1em',
+    position: 'relative',
+  }),
+  buttonContainer: css({
+    display: 'flex',
+    justifyContent: 'flex-end',
+  }),
+  closeButtonContainer: css({
+    position: 'absolute',
+    top: '-0.5em',
+    paddingTop: '0.5em',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    width: '100%',
   }),
   ingredientContainer: css({
     display: 'flex',
@@ -120,33 +104,10 @@ const styles = {
   ingredientField: css({
     flex: 1,
   }),
-};
-
-export default Relay.createContainer(IngredientList, {
-  fragments: {
-    recipe: () => Relay.QL`
-      fragment on Recipe {
-        activeTime
-        servings
-        totalTime
-        ingredientSets(first: 100) {
-          edges {
-            node {
-              id
-              title
-              ingredients(first: 100) {
-                edges {
-                  node {
-                    id
-                    quantity
-                    text
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    `,
+  set: css({
+    padding: '0em 1em',
+  }),
+  delete: {
+    color: DANGER,
   },
-});
+};
