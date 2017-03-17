@@ -1,5 +1,6 @@
 schema {
   query: RootQueryType
+  mutation: Mutation
 }
 
 type Direction implements Node {
@@ -105,6 +106,10 @@ type IngredientSetConnectionEdge {
   cursor: String!
 }
 
+type Mutation {
+  updateRecipe(input: UpdateRecipeInput!): UpdateRecipePayload
+}
+
 # An object with an ID
 interface Node {
   # The id of the object.
@@ -163,6 +168,25 @@ type RecipeConnectionEdge {
 
 type RootQueryType {
   viewer(token: String!): User
+}
+
+input UpdateRecipeInput {
+  activeTime: String
+  description: String
+  id: ID!
+  imageUrl: String
+  note: String
+  originalUrl: String
+  servings: String
+  source: String
+  title: String
+  totalTime: String
+  clientMutationId: String
+}
+
+type UpdateRecipePayload {
+  recipe: Recipe
+  clientMutationId: String
 }
 
 type User implements Node {

@@ -34,9 +34,6 @@ function Header ({
           onClick={ () => changeToEditRecipe(id) }
         >
           Edit
-          <div { ...styles.editIcon }>
-            <i className="fa fa-pencil"/>
-          </div>
         </a>
       </div>
 

@@ -69,7 +69,9 @@ class IngredientLists extends Component {
   }
 
   onDelete = (setIndex) => {
-    // TODO
+    const { ingredientSets } = this.state;
+    ingredientSets.splice(setIndex, 1);
+    this.setState({ ingredientSets });
   }
 
   openSet = (openSet) => this.setState({ openSet })

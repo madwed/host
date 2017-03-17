@@ -16,9 +16,11 @@ import {
   connectionFromArray,
   fromGlobalId,
   globalIdField,
+  mutationWithClientMutationId,
   nodeDefinitions,
 } from 'graphql-relay';
 
+import omitBy from 'lodash.omitby';
 import jwt from 'jwt-simple';
 
 import db from '../models';
@@ -187,6 +189,60 @@ const types = {
   User,
 };
 
+const UpdateRecipeMutation = mutationWithClientMutationId({
+  name: 'UpdateRecipe',
+  inputFields: {
+    activeTime: { type: GraphQLString },
+    description: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLID) },
+    imageUrl: { type: GraphQLString },
+    note: { type: GraphQLString },
+    originalUrl: { type: GraphQLString },
+    servings: { type: GraphQLString },
+    source: { type: GraphQLString },
+    title: { type: GraphQLString },
+    totalTime: { type: GraphQLString },
+  },
+  outputFields: {
+    recipe: {
+      type: Recipe,
+      resolve: ({ id }) => db.Recipe.findById(id),
+    },
+  },
+  mutateAndGetPayload: ({
+    activeTime,
+    description,
+    id,
+    imageUrl,
+    note,
+    originalUrl,
+    servings,
+    source,
+    title,
+    totalTime,
+  }) => {
+    const potentialValues = {
+      activeTime,
+      description,
+      id,
+      imageUrl,
+      note,
+      originalUrl,
+      servings,
+      source,
+      title,
+      totalTime,
+    };
+
+    const values = omitBy(potentialValues, (value) => value === null);
+
+    db.Recipe.upsert(values, {
+      fields: ['activeTime', 'description', 'imageUrl', 'note', 'originalUrl',
+        'servings', 'source', 'title', 'totalTime'],
+    });
+  }
+});
+
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQueryType',
@@ -203,5 +259,11 @@ export default new GraphQLSchema({
         }
       }
     }),
+  }),
+  mutation: new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+      updateRecipe: UpdateRecipeMutation,
+    },
   }),
 });
