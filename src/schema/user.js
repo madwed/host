@@ -36,7 +36,8 @@ const User = new GraphQLObjectType({
       args: connectionArgs,
       resolve(user, args) {
         return db.Recipe.findAll({
-          where: { userId: user.id }
+          where: { userId: user.id },
+          order: '"title"',
         }).then((recipes) => connectionFromArray(recipes, args));
       }
     },

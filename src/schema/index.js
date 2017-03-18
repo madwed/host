@@ -2,7 +2,11 @@ import { GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 
 
 import jwt from 'jwt-simple';
 
+import DestroyIngredientSetMutation from './destroy-ingredient-set-mutation';
+import UpdateIngredientMutation from './update-ingredient-mutation';
+import UpdateIngredientSetMutation from './update-ingredient-set-mutation';
 import UpdateRecipeMutation from './update-recipe-mutation';
+
 import User from './user';
 
 import db from '../models';
@@ -27,6 +31,9 @@ export default new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'Mutation',
     fields: {
+      destroyIngredientSet: DestroyIngredientSetMutation,
+      updateIngredient: UpdateIngredientMutation,
+      updateIngredientSet: UpdateIngredientSetMutation,
       updateRecipe: UpdateRecipeMutation,
     },
   }),

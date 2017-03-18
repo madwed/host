@@ -5,7 +5,15 @@ import debounce from 'lodash.debounce';
 
 import TextField from 'material-ui/TextField';
 
+import UpdateIngredient from '../../mutations/update-ingredient';
+
 class Ingredient extends Component {
+  onChange = debounce((update) => {
+    const { ingredient } = this.props;
+
+    this.props.relay.commitUpdate(new UpdateIngredient({ ingredient, ...update }));
+  }, 400)
+
   render() {
     const { id, quantity, text } = this.props.ingredient;
 
@@ -14,14 +22,14 @@ class Ingredient extends Component {
         <TextField
           defaultValue={ quantity }
           floatingLabelText="Quantity"
-          onChange={ (e, quantity) => onChange({ quantity }) }
+          onChange={ (e, quantity) => this.onChange({ quantity }) }
           style={ styles.quantityField }
         />
         <TextField
           className={ `${styles.ingredientField}` }
           defaultValue={ text }
           floatingLabelText="Ingredient"
-          onChange={ (e, text) => onIngredientChange({ text }) }
+          onChange={ (e, text) => this.onChange({ text }) }
         />
       </div>
     );
@@ -48,6 +56,7 @@ export default Relay.createContainer(Ingredient, {
         id
         quantity
         text
+        ${UpdateIngredient.getFragment('ingredient')}
       }
     `,
   },

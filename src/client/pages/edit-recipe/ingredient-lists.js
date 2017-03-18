@@ -31,7 +31,8 @@ class IngredientLists extends Component {
   openSet = (openSet) => this.setState({ openSet })
 
   render() {
-    const { activeTime, ingredientSets, totalTime, servings } = this.props.recipe;
+    const { recipe } = this.props;
+    const { activeTime, ingredientSets, totalTime, servings } = recipe;
     const { openSet } = this.state;
 
     return (
@@ -77,7 +78,10 @@ class IngredientLists extends Component {
                 return (
                   <div key={ ingredientSet.id }>
                     { index !== 0 && <Divider/> }
-                    <IngredientList ingredientSet={ ingredientSet }/>
+                    <IngredientList
+                      ingredientSet={ ingredientSet }
+                      recipe={ recipe }
+                    />
                   </div>
                 );
               })
@@ -114,6 +118,7 @@ export default Relay.createContainer(IngredientLists, {
         activeTime
         servings
         totalTime
+        ${IngredientList.getFragment('recipe')}
         ${UpdateRecipe.getFragment('recipe')}
         ingredientSets(first: 100) {
           edges {

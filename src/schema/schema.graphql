@@ -3,6 +3,17 @@ schema {
   mutation: Mutation
 }
 
+input DestroyIngredientSetInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type DestroyIngredientSetPayload {
+  destroyedIngredientSetId: ID!
+  recipe: Recipe
+  clientMutationId: String
+}
+
 # A connection to a list of items.
 type DirectionConnectionConnection {
   # Information to aid in pagination.
@@ -100,6 +111,9 @@ type IngredientSetConnectionEdge {
 }
 
 type Mutation {
+  destroyIngredientSet(input: DestroyIngredientSetInput!): DestroyIngredientSetPayload
+  updateIngredient(input: UpdateIngredientInput!): UpdateIngredientPayload
+  updateIngredientSet(input: UpdateIngredientSetInput!): UpdateIngredientSetPayload
   updateRecipe(input: UpdateRecipeInput!): UpdateRecipePayload
 }
 
@@ -161,6 +175,29 @@ type RecipeConnectionEdge {
 
 type RootQueryType {
   viewer(token: String!): User
+}
+
+input UpdateIngredientInput {
+  id: ID!
+  quantity: String
+  text: String
+  clientMutationId: String
+}
+
+type UpdateIngredientPayload {
+  ingredient: Ingredient
+  clientMutationId: String
+}
+
+input UpdateIngredientSetInput {
+  id: ID!
+  title: String
+  clientMutationId: String
+}
+
+type UpdateIngredientSetPayload {
+  ingredientSet: IngredientSet
+  clientMutationId: String
 }
 
 input UpdateRecipeInput {

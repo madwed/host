@@ -2,6 +2,7 @@ import React from 'react';
 import Relay from 'react-relay';
 import { css } from 'glamor';
 import { browserHistory } from 'react-router';
+import truncate from 'lodash.truncate';
 
 import { DARKER_TERTIARY, LIGHTEST_TERTIARY } from '../../palette';
 
@@ -25,7 +26,7 @@ function ListItem ({ recipe: { description, id, imageUrl, source, title } }) {
         {
           description && (
             <div { ...styles.description }>
-              { `${description.slice(0, 140).trim()}...`}
+              { truncate(description, { length: 140 }) }
             </div>
           )
         }

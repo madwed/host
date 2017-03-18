@@ -10,6 +10,7 @@ import TextField from 'material-ui/TextField';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
+import DestroyIngredientSet from '../../mutations/destroy-ingredient-set';
 import UpdateIngredientSet from '../../mutations/update-ingredient-set';
 import Ingredient from './ingredient';
 
@@ -24,6 +25,12 @@ class IngredientList extends Component {
     this.props.relay.commitUpdate(mutation);
   }, 400)
 
+  onDelete = () => {
+    const { ingredientSet, recipe } = this.props;
+    const mutation = new DestroyIngredientSet({ ingredientSet, recipe });
+    this.props.relay.commitUpdate(mutation);
+  }
+
   render() {
     const { ingredientSet: { ingredients, title } } = this.props;
 
@@ -32,7 +39,7 @@ class IngredientList extends Component {
         <div { ...styles.closeButtonContainer }>
           <IconButton
             iconStyle={ styles.delete }
-            onClick={ () => onDelete(setIndex) }
+            onClick={ this.onDelete }
             tooltip="Delete Section"
           >
             <NavigationClose/>
@@ -98,6 +105,8 @@ export default Relay.createContainer(IngredientList, {
       fragment on IngredientSet {
         id
         title
+        ${DestroyIngredientSet.getFragment('ingredientSet')}
+        ${UpdateIngredientSet.getFragment('ingredientSet')}
         ingredients(first: 100) {
           edges {
             node {
@@ -106,6 +115,12 @@ export default Relay.createContainer(IngredientList, {
             }
           }
         }
+      }
+    `,
+    recipe: () => Relay.QL`
+      fragment on Recipe {
+        id
+        ${DestroyIngredientSet.getFragment('recipe')}
       }
     `,
   },

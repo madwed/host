@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import Relay from 'react-relay';
+import sortBy from 'lodash.sortby';
 
 import ListItem from './list-item';
+
+const sortByTitle = (edges) => {
+  return sortBy(edges, ({ node }) => node.title.toLowerCase());
+};
 
 class Recipes extends Component {
   render() {
@@ -10,7 +15,7 @@ class Recipes extends Component {
     return (
       <div>
         {
-          recipes.edges.map(({ node }) => (
+          sortByTitle(recipes.edges).map(({ node }) => (
             <ListItem
               key={ node.id }
               recipe={ node }
@@ -26,10 +31,11 @@ export default Relay.createContainer(Recipes, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-        recipes(first: 10) {
+        recipes(first: 100) {
           edges {
             node {
               id
+              title
               ${ListItem.getFragment('recipe')}
             }
           }

@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay';
 
 import Recipe from './recipe';
@@ -23,8 +23,7 @@ const UpdateRecipeMutation = mutationWithClientMutationId({
     recipe: {
       type: Recipe,
       resolve: ({ id }) => {
-        console.log(id);
-        return db.Recipe.findById(id)
+        return db.Recipe.findById(id);
       },
     },
   },
@@ -37,7 +36,7 @@ const UpdateRecipeMutation = mutationWithClientMutationId({
     }).then(([_, rows]) => {
       return rows[0];
     });
-  }
+  },
 });
 
 export default UpdateRecipeMutation;
