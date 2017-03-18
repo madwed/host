@@ -18,7 +18,7 @@ module.exports = {
         },
       },
       displayOrder: Sequelize.INTEGER,
-      quantity: Sequelize.FLOAT,
+      quantity: Sequelize.TEXT,
       text: Sequelize.TEXT,
     });
   },

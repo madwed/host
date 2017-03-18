@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Relay from 'react-relay';
 import { css } from 'glamor';
-import merge from 'lodash.merge';
 
 import Divider from 'material-ui/Divider';
 import { List, ListItem } from 'material-ui/List';

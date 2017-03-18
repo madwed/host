@@ -3,29 +3,19 @@ import Relay from 'react-relay';
 import { css } from 'glamor';
 import TextField from 'material-ui/TextField';
 
+import UpdateRecipeMutation from '../../mutations/update-recipe-mutation';
 import Section from '../../components/section';
 import { LIGHTEST_PRIMARY } from '../../palette';
 
 class Header extends Component {
-  state = {
-    description: this.props.recipe.description || '',
-    imageUrl: this.props.recipe.imageUrl || '',
-    note: this.props.recipe.note || '',
-    originalUrl: this.props.recipe.originalUr || '',
-    source: this.props.recipe.source || '',
-    title: this.props.recipe.title || '',
-  };
+  onChange = (update) => {
+    const { recipe } = this.props;
 
-  onChange = ({ field, value }) => {
-    this.setState({ [field]: value });
+    this.props.relay.commitUpdate(new UpdateRecipeMutation({ recipe, ...update }));
   }
 
-  getFields = () => ({ recipe: this.state })
-
   render() {
-    const {
-      description, imageUrl, note, originalUrl, source, title,
-    } = this.state;
+    const { description, id, imageUrl, note, originalUrl, source, title } = this.props.recipe;
 
     return (
       <Section>
@@ -33,50 +23,44 @@ class Header extends Component {
           <div { ...styles.title }>
             <TextField
               className={ `${styles.titleField}` }
+              defaultValue={ title }
               floatingLabelText="Title"
               fullWidth={ true }
-              onChange={ (e, value) => this.onChange({ value, field: 'title' }) }
-              value={ title }
+              onChange={ (e, title) => this.onChange({ title }) }
             />
 
             <div { ...styles.source }>
               <TextField
                 className={ `${styles.sourceField}` }
+                defaultValue={ source }
                 floatingLabelText="Source"
-                onChange={
-                  (e, value) => this.onChange({ value, field: 'source' })
-                }
-                value={ source }
+                onChange={ (e, source) => this.onChange({ source }) }
               />
 
               <TextField
                 className={ `${styles.linkToSourceField}` }
+                defaultValue={ originalUrl }
                 floatingLabelText="Link To Source"
-                onChange={
-                  (e, value) => this.onChange({ value, field: 'originalUrl' })
-                }
-                value={ originalUrl }
+                onChange={ (e, originalUrl) => this.onChange({ originalUrl }) }
               />
             </div>
 
             <TextField
+              defaultValue={ description }
               floatingLabelText="Description"
               fullWidth={ true }
               multiLine={ true }
-              onChange={
-                (e, value) => this.onChange({ value, field: 'description' })
-              }
+              onChange={ (e, description) => this.onChange({ description }) }
               rows={ 2 }
-              value={ description }
             />
 
             <TextField
+              defaultValue={ note }
               floatingLabelText="Note"
               fullWidth={ true }
               multiLine={ true }
-              onChange={ (e, value) => this.onChange({ value, field: 'note' }) }
+              onChange={ (e, note) => this.onChange({ note }) }
               rows={ 2 }
-              value={ note }
             />
           </div>
 
@@ -111,6 +95,7 @@ export default Relay.createContainer(Header, {
     recipe: () => Relay.QL`
       fragment on Recipe {
         description, id, imageUrl, note, originalUrl, source, title,
+        ${UpdateRecipeMutation.getFragment('recipe')}
       }
     `,
   },

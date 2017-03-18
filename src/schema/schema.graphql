@@ -3,13 +3,6 @@ schema {
   mutation: Mutation
 }
 
-type Direction implements Node {
-  # The ID of an object
-  id: ID!
-  displayOrder: Int
-  text: String
-}
-
 # A connection to a list of items.
 type DirectionConnectionConnection {
   # Information to aid in pagination.
@@ -22,7 +15,7 @@ type DirectionConnectionConnection {
 # An edge in a connection.
 type DirectionConnectionEdge {
   # The item at the end of the edge
-  node: Direction
+  node: Ingredient
 
   # A cursor for use in pagination
   cursor: String!
@@ -58,7 +51,7 @@ type Ingredient implements Node {
   # The ID of an object
   id: ID!
   displayOrder: Int
-  quantity: Float
+  quantity: String
   text: String
 }
 

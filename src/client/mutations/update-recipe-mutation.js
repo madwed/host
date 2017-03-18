@@ -4,16 +4,7 @@ export default class UpdateRecipeMutation extends Relay.Mutation {
   static fragments = {
     recipe: () => Relay.QL`
       fragment on Recipe {
-        activeTime
-        description
         id
-        imageUrl
-        note
-        originalUrl
-        servings
-        source
-        title
-        totalTime
       }
     `,
   };
@@ -23,28 +14,25 @@ export default class UpdateRecipeMutation extends Relay.Mutation {
   }
 
   getVariables() {
-    const { recipe } = this.props;
-    const { activeTime, description, id, imageUrl, note } = recipe;
-    const { originalUrl, servings, source, title, totalTime } = recipe;
+    const { recipe, ...other } = this.props;
 
-    return {
-      activeTime,
-      description,
-      id,
-      imageUrl,
-      note,
-      originalUrl,
-      servings,
-      source,
-      title,
-      totalTime,
-    };
+    return { id: recipe.id, ...other };
   }
 
   getFatQuery() {
     return Relay.QL`
       fragment on UpdateRecipePayload {
-        recipe
+        recipe {
+          activeTime
+          description
+          imageUrl
+          note
+          originalUrl
+          servings
+          source
+          title
+          totalTime
+        }
       }
     `;
   }

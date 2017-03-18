@@ -18,13 +18,7 @@ module.exports = {
       originalUrl: Sequelize.TEXT,
       servings: Sequelize.TEXT,
       source: Sequelize.TEXT,
-      title: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
+      title: Sequelize.TEXT,
       totalTime: Sequelize.TEXT,
       userId: {
         type: Sequelize.UUID,
