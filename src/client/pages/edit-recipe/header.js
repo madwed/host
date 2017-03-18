@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import Relay from 'react-relay';
 import { css } from 'glamor';
+import debounce from 'lodash.debounce';
 import TextField from 'material-ui/TextField';
 
-import UpdateRecipeMutation from '../../mutations/update-recipe-mutation';
+import UpdateRecipe from '../../mutations/update-recipe';
 import Section from '../../components/section';
 import { LIGHTEST_PRIMARY } from '../../palette';
 
 class Header extends Component {
-  onChange = (update) => {
+  onChange = debounce((update) => {
     const { recipe } = this.props;
 
-    this.props.relay.commitUpdate(new UpdateRecipeMutation({ recipe, ...update }));
-  }
+    this.props.relay.commitUpdate(new UpdateRecipe({ recipe, ...update }));
+  }, 400)
 
   render() {
     const { description, id, imageUrl, note, originalUrl, source, title } = this.props.recipe;
@@ -95,7 +96,7 @@ export default Relay.createContainer(Header, {
     recipe: () => Relay.QL`
       fragment on Recipe {
         description, id, imageUrl, note, originalUrl, source, title,
-        ${UpdateRecipeMutation.getFragment('recipe')}
+        ${UpdateRecipe.getFragment('recipe')}
       }
     `,
   },

@@ -1,6 +1,6 @@
 import Relay from 'react-relay';
 
-export default class UpdateRecipeMutation extends Relay.Mutation {
+export default class UpdateRecipe extends Relay.Mutation {
   static fragments = {
     recipe: () => Relay.QL`
       fragment on Recipe {

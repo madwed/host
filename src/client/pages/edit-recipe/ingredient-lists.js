@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Relay from 'react-relay';
 import { css } from 'glamor';
+import debounce from 'lodash.debounce';
 
 import Divider from 'material-ui/Divider';
 import { List, ListItem } from 'material-ui/List';
@@ -9,6 +10,7 @@ import TextField from 'material-ui/TextField';
 
 import ExpandMore from 'material-ui/svg-icons/navigation/expand-more';
 
+import UpdateRecipe from '../../mutations/update-recipe';
 import IngredientList from './ingredient-list';
 import Section from '../../components/section';
 
@@ -18,124 +20,64 @@ import {
 } from '../../palette';
 
 class IngredientLists extends Component {
-  constructor(props) {
-    super(props);
+  state = { openSet: 0 }
 
-    const { recipe: { activeTime, ingredientSets, servings, totalTime } } = props;
+  onChange = debounce((update) => {
+    const { recipe } = this.props;
 
-    this.state = {
-      activeTime,
-      ingredientSets: ingredientSets.edges.map(({ node: setNode }, index) => {
-        return {
-          id: setNode.id,
-          ingredients: setNode.ingredients.edges.map(({ node }) => {
-            return {
-              id: node.id,
-              quantity: node.quantity,
-              text: node.text,
-            };
-          }),
-          title: setNode.title,
-        };
-      }),
-      openSet: 0,
-      servings,
-      totalTime,
-    };
-  }
-
-  onChange = ({ field, value }) => {
-    this.setState({ [field]: value });
-  }
-
-  onSetChange = ({ index, field, value }) => {
-    const { ingredientSets } = this.state;
-
-    const set = merge({}, ingredientSets[index], { [field]: value });
-    ingredientSets.splice(index, 1, set);
-
-    this.setState({ ingredientSets });
-  }
-
-  onIngredientChange = ({ setIndex, index, field, value }) => {
-    const { ingredientSets } = this.state;
-
-    const set = ingredientSets[setIndex];
-    const ingredient = merge({}, set.ingredients[index], { [field]: value });
-    set.ingredients.splice(index, 1, ingredient);
-
-    this.setState({ ingredientSets });
-  }
-
-  onDelete = (setIndex) => {
-    const { ingredientSets } = this.state;
-    ingredientSets.splice(setIndex, 1);
-    this.setState({ ingredientSets });
-  }
+    this.props.relay.commitUpdate(new UpdateRecipe({ recipe, ...update }));
+  }, 400)
 
   openSet = (openSet) => this.setState({ openSet })
 
-  getFields = () => ({ recipe: this.state })
-
   render() {
-    const { activeTime, ingredientSets, openSet, totalTime, servings } = this.state;
+    const { activeTime, ingredientSets, totalTime, servings } = this.props.recipe;
+    const { openSet } = this.state;
 
     return (
       <div { ...styles.container }>
         <Section>
           <TextField
+            defaultValue={ activeTime }
             floatingLabelText="Active Time"
             fullWidth={ true }
-            onChange={
-              (e, value) => this.onChange({ value, field: 'activeTime' })
-            }
-            value={ activeTime }
+            onChange={ (e, activeTime) => this.onChange({ activeTime }) }
           />
           <TextField
+            defaultValue={ totalTime }
             floatingLabelText="Total Time"
             fullWidth={ true }
-            onChange={
-              (e, value) => this.onChange({ value, field: 'totalTime' })
-            }
-            value={ totalTime }
+            onChange={ (e, totalTime) => this.onChange({ totalTime }) }
           />
           <TextField
+            defaultValue={ servings }
             floatingLabelText="Servings"
             fullWidth={ true }
-            onChange={
-              (e, value) => this.onChange({ value, field: 'servings' })
-            }
-            value={ servings }
+            onChange={ (e, servings) => this.onChange({ servings }) }
           />
         </Section>
 
         <Section style={ styles.setSection }>
           <List>
             {
-              ingredientSets.map((set, index) => {
+              ingredientSets.edges.map(({ node: ingredientSet }, index) => {
                 if (index !== openSet) {
                   return (
-                    <div key={ set.id }>
+                    <div key={ ingredientSet.id }>
                       { index !== 0 && <Divider/> }
                       <ListItem
                         hoverColor={ LIGHTEST_TERTIARY }
                         onClick={ () => this.openSet(index) }
-                        primaryText={ set.title }
+                        primaryText={ ingredientSet.title }
                         rightIcon={ <ExpandMore/> }
                       />
                     </div>
                   );
                 }
                 return (
-                  <div key={ set.id }>
+                  <div key={ ingredientSet.id }>
                     { index !== 0 && <Divider/> }
-                    <IngredientList
-                      list={ set }
-                      onDelete={ this.onDelete }
-                      onIngredientChange={ this.onIngredientChange }
-                      onSetChange={ this.onSetChange }
-                      setIndex={ index }
-                    />
+                    <IngredientList ingredientSet={ ingredientSet }/>
                   </div>
                 );
               })
@@ -172,20 +114,13 @@ export default Relay.createContainer(IngredientLists, {
         activeTime
         servings
         totalTime
+        ${UpdateRecipe.getFragment('recipe')}
         ingredientSets(first: 100) {
           edges {
             node {
               id
               title
-              ingredients(first: 100) {
-                edges {
-                  node {
-                    id
-                    quantity
-                    text
-                  }
-                }
-              }
+              ${IngredientList.getFragment('ingredientSet')}
             }
           }
         }

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Relay from 'react-relay';
 import { css } from 'glamor';
+import debounce from 'lodash.debounce';
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
@@ -8,73 +10,61 @@ import TextField from 'material-ui/TextField';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
+import UpdateIngredientSet from '../../mutations/update-ingredient-set';
+import Ingredient from './ingredient';
+
 import { DANGER } from '../../palette';
 
-export default function IngredientList ({
-  list,
-  onDelete,
-  onIngredientChange,
-  onSetChange,
-  setIndex,
-}) {
-  const { title, ingredients } = list;
+class IngredientList extends Component {
+  onChange = debounce((update) => {
+    const { ingredientSet } = this.props;
 
-  return (
-    <div { ...styles.container }>
-      <div { ...styles.closeButtonContainer }>
-        <IconButton
-          iconStyle={ styles.delete }
-          onClick={ () => onDelete(setIndex) }
-          tooltip="Delete Section"
-        >
-          <NavigationClose/>
-        </IconButton>
-      </div>
+    const mutation = new UpdateIngredientSet({ ingredientSet, ...update });
 
-      <div { ...styles.set }>
-        <TextField
-          floatingLabelText="Section Title"
-          fullWidth={ true }
-          onChange={ (e, value) => onSetChange({
-            index: setIndex, value, field: 'title',
-          }) }
-          value={ title }
-        />
+    this.props.relay.commitUpdate(mutation);
+  }, 400)
 
-        {
-          ingredients.map(({ id, quantity, text }, index) => (
-            <div { ...styles.ingredientContainer } key={ id }>
-              <TextField
-                floatingLabelText="Quantity"
-                onChange={ (e, value) => onIngredientChange({
-                  setIndex, index, value, field: 'quantity',
-                }) }
-                style={ styles.quantityField }
-                value={ quantity }
-              />
-              <TextField
-                className={ `${styles.ingredientField}` }
-                floatingLabelText="Ingredient"
-                onChange={ (e, value) => onIngredientChange({
-                  setIndex, index, value, field: 'text',
-                }) }
-                value={ text }
-              />
-            </div>
-          ))
-        }
+  render() {
+    const { ingredientSet: { ingredients, title } } = this.props;
 
-        <div { ...styles.buttonContainer }>
-          <FloatingActionButton
-            mini={ true }
-            zDepth={ 1 }
+    return (
+      <div { ...styles.container }>
+        <div { ...styles.closeButtonContainer }>
+          <IconButton
+            iconStyle={ styles.delete }
+            onClick={ () => onDelete(setIndex) }
+            tooltip="Delete Section"
           >
-            <ContentAdd/>
-          </FloatingActionButton>
+            <NavigationClose/>
+          </IconButton>
+        </div>
+
+        <div { ...styles.fields }>
+          <TextField
+            defaultValue={ title }
+            floatingLabelText="Section Title"
+            fullWidth={ true }
+            onChange={ (e, title) => this.onChange({ title }) }
+          />
+
+          {
+            ingredients.edges.map(({ node: ingredient }, index) => (
+              <Ingredient ingredient={ ingredient } key={ ingredient.id }/>
+            ))
+          }
+
+          <div { ...styles.addButtonContainer }>
+            <FloatingActionButton
+              mini={ true }
+              zDepth={ 1 }
+            >
+              <ContentAdd/>
+            </FloatingActionButton>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 const styles = {
@@ -82,7 +72,7 @@ const styles = {
     padding: '1em 0em 1em',
     position: 'relative',
   }),
-  buttonContainer: css({
+  addButtonContainer: css({
     display: 'flex',
     justifyContent: 'flex-end',
   }),
@@ -94,20 +84,29 @@ const styles = {
     justifyContent: 'flex-end',
     width: '100%',
   }),
-  ingredientContainer: css({
-    display: 'flex',
-  }),
-  quantityField: {
-    width: '4em',
-    marginRight: '1em',
-  },
-  ingredientField: css({
-    flex: 1,
-  }),
-  set: css({
+  fields: css({
     padding: '0em 1em',
   }),
   delete: {
     color: DANGER,
   },
 };
+
+export default Relay.createContainer(IngredientList, {
+  fragments: {
+    ingredientSet: () => Relay.QL`
+      fragment on IngredientSet {
+        id
+        title
+        ingredients(first: 100) {
+          edges {
+            node {
+              id
+              ${Ingredient.getFragment('ingredient')}
+            }
+          }
+        }
+      }
+    `,
+  },
+});

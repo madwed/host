@@ -22,7 +22,10 @@ const UpdateRecipeMutation = mutationWithClientMutationId({
   outputFields: {
     recipe: {
       type: Recipe,
-      resolve: ({ id }) => db.Recipe.findById(id),
+      resolve: ({ id }) => {
+        console.log(id);
+        return db.Recipe.findById(id)
+      },
     },
   },
   mutateAndGetPayload: ({ id: globalId, ...values }) => {
@@ -31,7 +34,9 @@ const UpdateRecipeMutation = mutationWithClientMutationId({
     return db.Recipe.update(values, {
       where: { id },
       returning: true,
-    }).then((_, rows) => rows[0]);
+    }).then(([_, rows]) => {
+      return rows[0];
+    });
   }
 });
 
