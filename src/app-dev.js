@@ -53,6 +53,8 @@ function startAppServer(callback) {
   appServer = new WebpackDevServer(compiler, {
     contentBase: '/public/',
     setup: (app) => {
+      app.use(express.static(path.join(__dirname, '/public')));
+
       app.get(
         '/auth/google',
         (req, res) => {

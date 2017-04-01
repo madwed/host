@@ -3,9 +3,15 @@ import Relay from 'react-relay';
 import { css } from 'glamor';
 import debounce from 'lodash.debounce';
 
+import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+
+import DestroyIngredient from '../../mutations/destroy-ingredient';
 import UpdateIngredient from '../../mutations/update-ingredient';
+
+import { DANGER } from '../../palette';
 
 class Ingredient extends Component {
   onChange = debounce((update) => {
@@ -14,11 +20,24 @@ class Ingredient extends Component {
     this.props.relay.commitUpdate(new UpdateIngredient({ ingredient, ...update }));
   }, 400)
 
+  onDelete = () => {
+    const { ingredient } = this.props;
+    this.props.relay.commitUpdate(new DestroyIngredient({ ingredient }));
+  }
+
   render() {
     const { id, quantity, text } = this.props.ingredient;
 
     return (
       <div { ...styles.container } key={ id }>
+        <IconButton
+          iconStyle={ styles.delete }
+          onClick={ this.onDelete }
+          tooltip="Delete"
+        >
+          <NavigationClose/>
+        </IconButton>
+
         <TextField
           defaultValue={ quantity }
           floatingLabelText="Quantity"
@@ -47,6 +66,9 @@ const styles = {
   ingredientField: css({
     flex: 1,
   }),
+  delete: {
+    color: DANGER,
+  },
 };
 
 export default Relay.createContainer(Ingredient, {
@@ -56,6 +78,7 @@ export default Relay.createContainer(Ingredient, {
         id
         quantity
         text
+        ${DestroyIngredient.getFragment('ingredient')}
         ${UpdateIngredient.getFragment('ingredient')}
       }
     `,

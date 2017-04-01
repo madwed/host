@@ -70,7 +70,7 @@ class IngredientLists extends Component {
                         hoverColor={ LIGHTEST_TERTIARY }
                         onClick={ () => this.openSet(index) }
                         primaryText={ ingredientSet.title }
-                        rightIcon={ <ExpandMore/> }
+                        rightIcon={ <ExpandMore style={ styles.expand }/> }
                       />
                     </div>
                   );
@@ -109,6 +109,9 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
   }),
+  expand: {
+    right: '0em',
+  },
 };
 
 export default Relay.createContainer(IngredientLists, {

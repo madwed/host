@@ -11,7 +11,10 @@ import Ingredient from './ingredient';
 import { addType, nodeInterface } from './node';
 import db from '../models';
 
-const { connectionType: IngredientConnection } = connectionDefinitions({
+const {
+  connectionType: IngredientConnection,
+  edgeType: IngredientEdge,
+} = connectionDefinitions({
   name: 'IngredientConnection',
   nodeType: Ingredient,
 });
@@ -38,4 +41,5 @@ const IngredientSet = new GraphQLObjectType({
 
 addType({ IngredientSet });
 
+export { IngredientEdge };
 export default IngredientSet;

@@ -3,18 +3,18 @@ import Relay from 'react-relay';
 import { css } from 'glamor';
 import debounce from 'lodash.debounce';
 
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
+import CreateIngredient from '../../mutations/create-ingredient';
 import DestroyIngredientSet from '../../mutations/destroy-ingredient-set';
 import UpdateIngredientSet from '../../mutations/update-ingredient-set';
 import Ingredient from './ingredient';
 
-import { DANGER } from '../../palette';
+import { DANGER, LIGHTER_PRIMARY } from '../../palette';
 
 class IngredientList extends Component {
   onChange = debounce((update) => {
@@ -31,12 +31,17 @@ class IngredientList extends Component {
     this.props.relay.commitUpdate(mutation);
   }
 
+  onAdd = () => {
+    const { ingredientSet } = this.props;
+    this.props.relay.commitUpdate(new CreateIngredient({ ingredientSet }));
+  }
+
   render() {
     const { ingredientSet: { ingredients, title } } = this.props;
 
     return (
-      <div { ...styles.container }>
-        <div { ...styles.closeButtonContainer }>
+      <div>
+        <div { ...styles.buttonContainer } { ...styles.destroyContainer }>
           <IconButton
             iconStyle={ styles.delete }
             onClick={ this.onDelete }
@@ -59,15 +64,16 @@ class IngredientList extends Component {
               <Ingredient ingredient={ ingredient } key={ ingredient.id }/>
             ))
           }
+        </div>
 
-          <div { ...styles.addButtonContainer }>
-            <FloatingActionButton
-              mini={ true }
-              zDepth={ 1 }
-            >
-              <ContentAdd/>
-            </FloatingActionButton>
-          </div>
+        <div { ...styles.buttonContainer }>
+          <IconButton
+            iconStyle={ styles.add }
+            onClick={ this.onAdd }
+            tooltip="Add Ingredient"
+          >
+            <ContentAdd/>
+          </IconButton>
         </div>
       </div>
     );
@@ -75,25 +81,19 @@ class IngredientList extends Component {
 }
 
 const styles = {
-  container: css({
-    padding: '1em 0em 1em',
-    position: 'relative',
+  destroyContainer: css({
+    height: '1em',
   }),
-  addButtonContainer: css({
+  buttonContainer: css({
     display: 'flex',
     justifyContent: 'flex-end',
-  }),
-  closeButtonContainer: css({
-    position: 'absolute',
-    top: '-0.5em',
-    paddingTop: '0.5em',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    width: '100%',
   }),
   fields: css({
     padding: '0em 1em',
   }),
+  add: {
+    color: LIGHTER_PRIMARY,
+  },
   delete: {
     color: DANGER,
   },
@@ -105,6 +105,7 @@ export default Relay.createContainer(IngredientList, {
       fragment on IngredientSet {
         id
         title
+        ${CreateIngredient.getFragment('ingredientSet')}
         ${DestroyIngredientSet.getFragment('ingredientSet')}
         ${UpdateIngredientSet.getFragment('ingredientSet')}
         ingredients(first: 100) {

@@ -8,6 +8,7 @@ const Ingredient = new GraphQLObjectType({
   name: 'Ingredient',
   fields: {
     id: globalIdField('Ingredient'),
+    ingredientSetId: globalIdField('IngredientSet'),
     displayOrder: { type: GraphQLInt },
     quantity: { type: GraphQLString },
     text: { type: GraphQLString },

@@ -3,6 +3,30 @@ schema {
   mutation: Mutation
 }
 
+input CreateIngredientInput {
+  edgeCount: Int!
+  ingredientSetId: ID!
+  clientMutationId: String
+}
+
+type CreateIngredientPayload {
+  ingredientEdge: IngredientConnectionEdge
+  ingredientSet: IngredientSet
+  clientMutationId: String
+}
+
+input DestroyIngredientInput {
+  id: ID!
+  ingredientSetId: ID!
+  clientMutationId: String
+}
+
+type DestroyIngredientPayload {
+  destroyedIngredientId: ID!
+  ingredientSet: IngredientSet
+  clientMutationId: String
+}
+
 input DestroyIngredientSetInput {
   id: ID!
   clientMutationId: String
@@ -61,6 +85,9 @@ type DirectionSetConnectionEdge {
 type Ingredient implements Node {
   # The ID of an object
   id: ID!
+
+  # The ID of an object
+  ingredientSetId: ID!
   displayOrder: Int
   quantity: String
   text: String
@@ -111,6 +138,8 @@ type IngredientSetConnectionEdge {
 }
 
 type Mutation {
+  createIngredient(input: CreateIngredientInput!): CreateIngredientPayload
+  destroyIngredient(input: DestroyIngredientInput!): DestroyIngredientPayload
   destroyIngredientSet(input: DestroyIngredientSetInput!): DestroyIngredientSetPayload
   updateIngredient(input: UpdateIngredientInput!): UpdateIngredientPayload
   updateIngredientSet(input: UpdateIngredientSetInput!): UpdateIngredientSetPayload
