@@ -41,14 +41,14 @@ class Ingredient extends Component {
 
         <TextField
           defaultValue={ quantity }
-          floatingLabelText="Quantity"
+          hintText="Quantity"
           onChange={ (e, quantity) => this.onChange({ quantity }) }
           style={ styles.quantityField }
         />
         <TextField
           className={ `${styles.ingredientField}` }
           defaultValue={ text }
-          floatingLabelText="Ingredient"
+          hintText="Ingredient"
           onChange={ (e, text) => this.onChange({ text }) }
         />
       </div>

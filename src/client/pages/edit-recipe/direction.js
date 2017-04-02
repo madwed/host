@@ -42,7 +42,7 @@ class Direction extends Component {
         <TextField
           className={ `${styles.directionField}` }
           defaultValue={ text }
-          floatingLabelText="Direction"
+          hintText="Direction"
           multiLine={ true }
           onChange={ (e, text) => this.onChange({ text }) }
           rows={ 2 }

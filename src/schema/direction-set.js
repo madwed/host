@@ -11,7 +11,10 @@ import Direction from './direction';
 import { addType, nodeInterface } from './node';
 import db from '../models';
 
-const { connectionType: DirectionConnection } = connectionDefinitions({
+const {
+  connectionType: DirectionConnection,
+  edgeType: DirectionEdge,
+} = connectionDefinitions({
   name: 'DirectionConnection',
   nodeType: Direction,
 });
@@ -39,4 +42,5 @@ const DirectionSet = new GraphQLObjectType({
 
 addType({ DirectionSet });
 
+export { DirectionEdge };
 export default DirectionSet;

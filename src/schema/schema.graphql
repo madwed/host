@@ -3,6 +3,18 @@ schema {
   mutation: Mutation
 }
 
+input CreateDirectionInput {
+  edgeCount: Int!
+  directionSetId: ID!
+  clientMutationId: String
+}
+
+type CreateDirectionPayload {
+  directionEdge: DirectionConnectionEdge
+  directionSet: DirectionSet
+  clientMutationId: String
+}
+
 input CreateIngredientInput {
   edgeCount: Int!
   ingredientSetId: ID!
@@ -12,6 +24,29 @@ input CreateIngredientInput {
 type CreateIngredientPayload {
   ingredientEdge: IngredientConnectionEdge
   ingredientSet: IngredientSet
+  clientMutationId: String
+}
+
+input DestroyDirectionInput {
+  id: ID!
+  directionSetId: ID!
+  clientMutationId: String
+}
+
+type DestroyDirectionPayload {
+  destroyedDirectionId: ID!
+  directionSet: DirectionSet
+  clientMutationId: String
+}
+
+input DestroyDirectionSetInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type DestroyDirectionSetPayload {
+  destroyedDirectionSetId: ID!
+  recipe: Recipe
   clientMutationId: String
 }
 
@@ -154,9 +189,14 @@ type IngredientSetConnectionEdge {
 }
 
 type Mutation {
+  createDirection(input: CreateDirectionInput!): CreateDirectionPayload
   createIngredient(input: CreateIngredientInput!): CreateIngredientPayload
+  destroyDirection(input: DestroyDirectionInput!): DestroyDirectionPayload
+  destroyDirectionSet(input: DestroyDirectionSetInput!): DestroyDirectionSetPayload
   destroyIngredient(input: DestroyIngredientInput!): DestroyIngredientPayload
   destroyIngredientSet(input: DestroyIngredientSetInput!): DestroyIngredientSetPayload
+  updateDirection(input: UpdateDirectionInput!): UpdateDirectionPayload
+  updateDirectionSet(input: UpdateDirectionSetInput!): UpdateDirectionSetPayload
   updateIngredient(input: UpdateIngredientInput!): UpdateIngredientPayload
   updateIngredientSet(input: UpdateIngredientSetInput!): UpdateIngredientSetPayload
   updateRecipe(input: UpdateRecipeInput!): UpdateRecipePayload
@@ -225,6 +265,28 @@ type RootQueryType {
     id: ID!
   ): Node
   viewer(token: String!): User
+}
+
+input UpdateDirectionInput {
+  id: ID!
+  text: String
+  clientMutationId: String
+}
+
+type UpdateDirectionPayload {
+  direction: Direction
+  clientMutationId: String
+}
+
+input UpdateDirectionSetInput {
+  id: ID!
+  title: String
+  clientMutationId: String
+}
+
+type UpdateDirectionSetPayload {
+  directionSet: DirectionSet
+  clientMutationId: String
 }
 
 input UpdateIngredientInput {
