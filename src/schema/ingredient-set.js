@@ -34,6 +34,7 @@ const IngredientSet = new GraphQLObjectType({
         }).then((ingredients) => connectionFromArray(ingredients, args));
       }
     },
+    recipeId: globalIdField('Recipe'),
     title: { type: GraphQLString },
   },
   interfaces: [nodeInterface],

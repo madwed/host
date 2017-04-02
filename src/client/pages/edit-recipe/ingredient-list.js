@@ -26,8 +26,8 @@ class IngredientList extends Component {
   }, 400)
 
   onDelete = () => {
-    const { ingredientSet, recipe } = this.props;
-    const mutation = new DestroyIngredientSet({ ingredientSet, recipe });
+    const { ingredientSet } = this.props;
+    const mutation = new DestroyIngredientSet({ ingredientSet });
     this.props.relay.commitUpdate(mutation);
   }
 
@@ -116,12 +116,6 @@ export default Relay.createContainer(IngredientList, {
             }
           }
         }
-      }
-    `,
-    recipe: () => Relay.QL`
-      fragment on Recipe {
-        id
-        ${DestroyIngredientSet.getFragment('recipe')}
       }
     `,
   },

@@ -2,12 +2,12 @@ import { GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 
 
 import jwt from 'jwt-simple';
 
-import CreateIngredientMutation from './create-ingredient-mutation';
-import DestroyIngredientMutation from './destroy-ingredient-mutation';
-import DestroyIngredientSetMutation from './destroy-ingredient-set-mutation';
-import UpdateIngredientMutation from './update-ingredient-mutation';
-import UpdateIngredientSetMutation from './update-ingredient-set-mutation';
-import UpdateRecipeMutation from './update-recipe-mutation';
+import CreateIngredientMutation from './mutations/create-ingredient';
+import DestroyIngredientMutation from './mutations/destroy-ingredient';
+import DestroyIngredientSetMutation from './mutations/destroy-ingredient-set';
+import UpdateIngredientMutation from './mutations/update-ingredient';
+import UpdateIngredientSetMutation from './mutations/update-ingredient-set';
+import UpdateRecipeMutation from './mutations/update-recipe';
 
 import User from './user';
 

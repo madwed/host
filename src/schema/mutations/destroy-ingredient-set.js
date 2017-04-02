@@ -5,9 +5,9 @@ import {
   toGlobalId,
 } from 'graphql-relay';
 
-import Recipe from './recipe';
+import Recipe from '../recipe';
 
-import db from '../models';
+import db from '../../models';
 
 const DestroyIngredientSetMutation = mutationWithClientMutationId({
   name: 'DestroyIngredientSet',

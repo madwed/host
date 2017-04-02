@@ -31,6 +31,7 @@ const DirectionSet = new GraphQLObjectType({
       }
     },
     displayOrder: { type: GraphQLInt },
+    recipeId: globalIdField('Recipe'),
     title: { type: GraphQLString },
   },
   interfaces: [nodeInterface],

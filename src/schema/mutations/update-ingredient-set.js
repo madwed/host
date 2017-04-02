@@ -1,29 +1,28 @@
 import { GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay';
 
-import Ingredient from './ingredient';
+import IngredientSet from '../ingredient-set';
 
-import db from '../models';
+import db from '../../models';
 
-const UpdateIngredientMutation = mutationWithClientMutationId({
-  name: 'UpdateIngredient',
+const UpdateIngredientSetMutation = mutationWithClientMutationId({
+  name: 'UpdateIngredientSet',
   inputFields: {
     id: { type: new GraphQLNonNull(GraphQLID) },
-    quantity: { type: GraphQLString },
-    text: { type: GraphQLString },
+    title: { type: GraphQLString },
   },
   outputFields: {
-    ingredient: {
-      type: Ingredient,
+    ingredientSet: {
+      type: IngredientSet,
       resolve: ({ id }) => {
-        return db.Ingredient.findById(id);
+        return db.IngredientSet.findById(id);
       },
     },
   },
   mutateAndGetPayload: ({ id: globalId, ...values }) => {
     const { id } = fromGlobalId(globalId);
 
-    return db.Ingredient.update(values, {
+    return db.IngredientSet.update(values, {
       where: { id },
       returning: true,
     }).then(([_, rows]) => {
@@ -32,4 +31,4 @@ const UpdateIngredientMutation = mutationWithClientMutationId({
   },
 });
 
-export default UpdateIngredientMutation;
+export default UpdateIngredientSetMutation;

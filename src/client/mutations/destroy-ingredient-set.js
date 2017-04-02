@@ -5,11 +5,7 @@ export default class DestroyIngredientSet extends Relay.Mutation {
     ingredientSet: () => Relay.QL`
       fragment on IngredientSet {
         id
-      }
-    `,
-    recipe: () => Relay.QL`
-      fragment on Recipe {
-        id
+        recipeId
       }
     `,
   };
@@ -37,7 +33,7 @@ export default class DestroyIngredientSet extends Relay.Mutation {
     return [{
       type: 'NODE_DELETE',
       parentName: 'recipe',
-      parentID: this.props.recipe.id,
+      parentID: this.props.ingredientSet.recipeId,
       connectionName: 'ingredientSets',
       deletedIDFieldName: 'destroyedIngredientSetId',
     }];

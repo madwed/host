@@ -5,9 +5,9 @@ import {
   offsetToCursor,
 } from 'graphql-relay';
 
-import IngredientSet, { IngredientEdge } from './ingredient-set';
+import IngredientSet, { IngredientEdge } from '../ingredient-set';
 
-import db from '../models';
+import db from '../../models';
 
 const CreateIngredientMutation = mutationWithClientMutationId({
   name: 'CreateIngredient',

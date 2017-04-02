@@ -8,25 +8,25 @@ import TextField from 'material-ui/TextField';
 
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
-import DestroyIngredient from '../../mutations/destroy-ingredient';
-import UpdateIngredient from '../../mutations/update-ingredient';
+import DestroyDirection from '../../mutations/destroy-direction';
+import UpdateDirection from '../../mutations/update-direction';
 
 import { DANGER } from '../../palette';
 
-class Ingredient extends Component {
+class Direction extends Component {
   onChange = debounce((update) => {
-    const { ingredient } = this.props;
+    const { direction } = this.props;
 
-    this.props.relay.commitUpdate(new UpdateIngredient({ ingredient, ...update }));
+    this.props.relay.commitUpdate(new UpdateDirection({ direction, ...update }));
   }, 400)
 
   onDelete = () => {
-    const { ingredient } = this.props;
-    this.props.relay.commitUpdate(new DestroyIngredient({ ingredient }));
+    const { direction } = this.props;
+    this.props.relay.commitUpdate(new DestroyDirection({ direction }));
   }
 
   render() {
-    const { id, quantity, text } = this.props.ingredient;
+    const { id, text } = this.props.direction;
 
     return (
       <div { ...styles.container } key={ id }>
@@ -40,15 +40,9 @@ class Ingredient extends Component {
         </IconButton>
 
         <TextField
-          defaultValue={ quantity }
-          floatingLabelText="Quantity"
-          onChange={ (e, quantity) => this.onChange({ quantity }) }
-          style={ styles.quantityField }
-        />
-        <TextField
-          className={ `${styles.ingredientField}` }
+          className={ `${styles.directionField}` }
           defaultValue={ text }
-          floatingLabelText="Ingredient"
+          floatingLabelText="Direction"
           onChange={ (e, text) => this.onChange({ text }) }
         />
       </div>
@@ -65,7 +59,7 @@ const styles = {
     width: '8em',
     marginRight: '1em',
   },
-  ingredientField: css({
+  directionField: css({
     flex: 1,
   }),
   delete: {
@@ -77,15 +71,14 @@ const styles = {
   },
 };
 
-export default Relay.createContainer(Ingredient, {
+export default Relay.createContainer(Direction, {
   fragments: {
-    ingredient: () => Relay.QL`
-      fragment on Ingredient {
+    direction: () => Relay.QL`
+      fragment on Direction {
         id
-        quantity
         text
-        ${DestroyIngredient.getFragment('ingredient')}
-        ${UpdateIngredient.getFragment('ingredient')}
+        ${DestroyDirection.getFragment('direction')}
+        ${UpdateDirection.getFragment('direction')}
       }
     `,
   },

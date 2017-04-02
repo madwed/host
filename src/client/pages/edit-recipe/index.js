@@ -4,6 +4,7 @@ import { css } from 'glamor';
 import { browserHistory } from 'react-router';
 
 import Header from './header';
+import DirectionLists from './direction-lists';
 import IngredientLists from './ingredient-lists';
 
 class EditRecipe extends Component {
@@ -20,10 +21,11 @@ class EditRecipe extends Component {
 
     return (
       <div { ...styles.container }>
-        <Header recipe={ recipe } ref="header"/>
+        <Header recipe={ recipe }/>
 
         <div { ...styles.details }>
-          <IngredientLists recipe={ recipe } ref="ingredientLists"/>
+          <IngredientLists recipe={ recipe }/>
+          <DirectionLists recipe={ recipe }/>
         </div>
       </div>
     );
@@ -56,6 +58,7 @@ export default Relay.createContainer(EditRecipe, {
         recipe(id: $id) {
           id
           ${Header.getFragment('recipe')}
+          ${DirectionLists.getFragment('recipe')}
           ${IngredientLists.getFragment('recipe')}
         }
       }

@@ -1,9 +1,9 @@
 import { GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay';
 
-import Recipe from './recipe';
+import Recipe from '../recipe';
 
-import db from '../models';
+import db from '../../models';
 
 const UpdateRecipeMutation = mutationWithClientMutationId({
   name: 'UpdateRecipe',
