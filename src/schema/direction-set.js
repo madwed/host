@@ -7,7 +7,7 @@ import {
   globalIdField,
 } from 'graphql-relay';
 
-import Direction from './ingredient';
+import Direction from './direction';
 import { addType, nodeInterface } from './node';
 import db from '../models';
 
