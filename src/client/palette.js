@@ -17,4 +17,6 @@ export const DARKER_TERTIARY = '#567714';
 export const DARKEST_TERTIARY = '#354F00';
 
 export const DANGER = '#AA3838';
+export const GOOGLE_RED = '#EA4335';
+export const LIGHTER_GOOGLE_RED = '#ED7065';
 export const WHITE = '#FFFFFF';

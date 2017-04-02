@@ -81,7 +81,7 @@ const styles = {
   titleContainer: css({
     display: 'flex',
   }),
-  title: css({ padding: '1em', flex: 1 }),
+  title: css({ padding: '0em 1em 0em 0em', flex: 1 }),
   source: css({ display: 'flex', justifyContent: 'space-between' }),
   titleField: css({
     fontSize: '2em !important',

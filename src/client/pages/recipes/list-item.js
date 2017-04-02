@@ -4,7 +4,7 @@ import { css } from 'glamor';
 import { browserHistory } from 'react-router';
 import truncate from 'lodash.truncate';
 
-import { DARKER_TERTIARY, LIGHTEST_TERTIARY } from '../../palette';
+import { LIGHTEST_TERTIARY } from '../../palette';
 
 const changeToRecipe = (id) => {
   browserHistory.push(`/recipes/${id}`);
@@ -51,7 +51,6 @@ const styles = {
   image: css({
     height: '3em',
     width: '4em',
-    border: `3px solid ${DARKER_TERTIARY}`,
     borderRadius: '2px',
   }),
   title: css({

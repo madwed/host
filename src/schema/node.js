@@ -1,10 +1,10 @@
-import { nodeDefinitions } from 'graphql-relay';
+import { fromGlobalId, nodeDefinitions } from 'graphql-relay';
 
 import db from '../models';
 
 let types = {};
 
-export const { nodeInterface } = nodeDefinitions(
+export const { nodeField, nodeInterface } = nodeDefinitions(
   (globalId) => {
     const { type, id } = fromGlobalId(globalId);
     return db[type].findById(id);

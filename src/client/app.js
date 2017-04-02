@@ -6,11 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
 
-import {
-  applyRouterMiddleware,
-  browserHistory,
-  useRouterHistory,
-} from 'react-router';
+import { applyRouterMiddleware, browserHistory } from 'react-router';
 
 import useRelay from 'react-router-relay';
 

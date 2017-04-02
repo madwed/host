@@ -9,6 +9,7 @@ import UpdateIngredientMutation from './mutations/update-ingredient';
 import UpdateIngredientSetMutation from './mutations/update-ingredient-set';
 import UpdateRecipeMutation from './mutations/update-recipe';
 
+import { nodeField } from './node';
 import User from './user';
 
 import db from '../models';
@@ -17,6 +18,7 @@ export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQueryType',
     fields: () => ({
+      node: nodeField,
       viewer: {
         type: User,
         args: {
