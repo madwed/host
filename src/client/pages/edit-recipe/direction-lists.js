@@ -69,7 +69,7 @@ class DirectionLists extends Component {
 
 const styles = {
   container: css({
-    flex: 1,
+    flex: 1.5,
   }),
   setSection: css({
     padding: '0em',

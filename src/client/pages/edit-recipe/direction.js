@@ -43,7 +43,9 @@ class Direction extends Component {
           className={ `${styles.directionField}` }
           defaultValue={ text }
           floatingLabelText="Direction"
+          multiLine={ true }
           onChange={ (e, text) => this.onChange({ text }) }
+          rows={ 2 }
         />
       </div>
     );
@@ -53,7 +55,7 @@ class Direction extends Component {
 const styles = {
   container: css({
     display: 'flex',
-    alignItems: 'flex-end',
+    alignItems: 'center',
   }),
   quantityField: {
     width: '8em',

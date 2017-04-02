@@ -8,6 +8,7 @@ const Direction = new GraphQLObjectType({
   name: 'Direction',
   fields: {
     id: globalIdField('Direction'),
+    directionSetId: globalIdField('DirectionSet'),
     displayOrder: { type: GraphQLInt },
     text: { type: GraphQLString },
   },

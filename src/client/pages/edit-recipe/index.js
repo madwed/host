@@ -25,6 +25,7 @@ class EditRecipe extends Component {
 
         <div { ...styles.details }>
           <IngredientLists recipe={ recipe }/>
+          <div { ...styles.spacer }/>
           <DirectionLists recipe={ recipe }/>
         </div>
       </div>
@@ -40,6 +41,9 @@ const styles = {
   }),
   details: css({
     display: 'flex',
+  }),
+  spacer: css({
+    width: '1em',
   }),
 };
 

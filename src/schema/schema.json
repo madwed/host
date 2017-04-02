@@ -892,6 +892,22 @@
               "deprecationReason": null
             },
             {
+              "name": "directionSetId",
+              "description": "The ID of an object",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "displayOrder",
               "description": null,
               "args": [],

@@ -41,6 +41,9 @@ type DestroyIngredientSetPayload {
 type Direction implements Node {
   # The ID of an object
   id: ID!
+
+  # The ID of an object
+  directionSetId: ID!
   displayOrder: Int
   text: String
 }
