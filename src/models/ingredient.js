@@ -8,13 +8,17 @@ export default (sequelize) => {
       primaryKey: true,
     },
     ingredientSetId: {
+      field: 'ingredient_set_id',
       type: Sequelize.UUID,
       references: {
         model: 'ingredientSets',
         key: 'id',
       },
     },
-    displayOrder: Sequelize.INTEGER,
+    displayOrder: {
+      field: 'display_order',
+      type: Sequelize.INTEGER,
+    },
     quantity: Sequelize.FLOAT,
     text: Sequelize.TEXT,
   }, {

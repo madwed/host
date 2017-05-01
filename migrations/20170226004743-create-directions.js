@@ -8,16 +8,16 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      createdAt: Sequelize.DATE,
-      updatedAt: Sequelize.DATE,
-      directionSetId: {
+      created_at: Sequelize.DATE,
+      updated_at: Sequelize.DATE,
+      direction_set_id: {
         type: Sequelize.UUID,
         references: {
           model: 'directionSets',
           key: 'id',
         },
       },
-      displayOrder: Sequelize.INTEGER,
+      display_order: Sequelize.INTEGER,
       text: Sequelize.TEXT,
     });
   },

@@ -8,13 +8,17 @@ export default (sequelize) => {
       primaryKey: true,
     },
     directionSetId: {
+      field: 'direction_set_id',
       type: Sequelize.UUID,
       references: {
         model: 'directionSets',
         key: 'id',
       },
     },
-    displayOrder: Sequelize.INTEGER,
+    displayOrder: {
+      field: 'display_order',
+      type: Sequelize.INTEGER,
+    },
     text: Sequelize.TEXT,
   }, {
     classMethods: {

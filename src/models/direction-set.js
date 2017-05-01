@@ -8,13 +8,17 @@ export default (sequelize) => {
       primaryKey: true,
     },
     recipeId: {
+      field: 'recipe_id',
       type: Sequelize.UUID,
       references: {
         model: 'recipes',
         key: 'id',
       },
     },
-    displayOrder: Sequelize.INTEGER,
+    displayOrder: {
+      field: 'display_order',
+      type: Sequelize.INTEGER,
+    },
     title: Sequelize.TEXT,
   }, {
     classMethods: {

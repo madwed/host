@@ -8,12 +8,12 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      createdAt: Sequelize.DATE,
-      updatedAt: Sequelize.DATE,
-      firstName: Sequelize.TEXT,
-      lastName: Sequelize.TEXT,
+      created_at: Sequelize.DATE,
+      updated_at: Sequelize.DATE,
+      first_name: Sequelize.TEXT,
+      last_name: Sequelize.TEXT,
       email: Sequelize.TEXT,
-      googleId: Sequelize.TEXT,
+      google_id: Sequelize.TEXT,
     });
   },
 

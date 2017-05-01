@@ -7,12 +7,21 @@ export default (sequelize) => {
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    activeTime: Sequelize.TEXT,
+    activeTime: {
+      field: 'active_time',
+      type: Sequelize.TEXT,
+    },
     description: Sequelize.TEXT,
     favorite: Sequelize.BOOLEAN,
-    imageUrl: Sequelize.TEXT,
+    imageUrl: {
+      field: 'image_url',
+      type: Sequelize.TEXT,
+    },
     note: Sequelize.TEXT,
-    originalUrl: Sequelize.TEXT,
+    originalUrl: {
+      field: 'original_url',
+      type: Sequelize.TEXT,
+    },
     servings: Sequelize.TEXT,
     source: Sequelize.TEXT,
     title: {
@@ -22,7 +31,10 @@ export default (sequelize) => {
         notEmpty: true,
       },
     },
-    totalTime: Sequelize.TEXT,
+    totalTime: {
+      field: 'total_time',
+      type: Sequelize.TEXT,
+    },
   }, {
     classMethods: {
       associate: (models) => {

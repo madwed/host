@@ -8,10 +8,19 @@ export default (sequelize) => {
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    firstName: Sequelize.TEXT,
-    lastName: Sequelize.TEXT,
+    firstName: {
+      field: 'first_name',
+      type: Sequelize.TEXT,
+    }
+    lastName: {
+      field: 'last_name',
+      type: Sequelize.TEXT,
+    },
     email: Sequelize.TEXT,
-    googleId: Sequelize.TEXT,
+    googleId: {
+      field: 'google_id',
+      type: Sequelize.TEXT,
+    },
   }, {
     classMethods: {
       associate: (models) => {
