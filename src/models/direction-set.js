@@ -34,3 +34,22 @@ export default (sequelize) => {
   return DirectionSet;
 };
 
+    return queryInterface.createTable('directionSets', {
+      id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+      },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE,
+      recipeId: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'recipes',
+          key: 'id',
+        },
+      },
+      displayOrder: Sequelize.INTEGER,
+      title: Sequelize.TEXT,
+    });
+  },
