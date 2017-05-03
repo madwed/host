@@ -10,8 +10,6 @@ import {
 import Recipe from './recipe';
 import { addType, nodeInterface } from './node';
 
-import db from '../models';
-
 const { connectionType: RecipeConnection } = connectionDefinitions({
   name: 'RecipeConnection',
   nodeType: Recipe,
@@ -28,17 +26,16 @@ const User = new GraphQLObjectType({
       },
       resolve(user, { id: globalId }) {
         const { type, id } = fromGlobalId(globalId);
-        return db.Recipe.findOne({ where: { userId: user.id, id } });
+        return Recipe.findOne({ userId: user.id, id });
       }
     },
     recipes: {
       type: RecipeConnection,
       args: connectionArgs,
       resolve(user, args) {
-        return db.Recipe.findAll({
-          where: { userId: user.id },
-          order: '"title"',
-        }).then((recipes) => connectionFromArray(recipes, args));
+        return user.recipes().then((recipes) => {
+          return connectionFromArray(recipes, args)
+        });
       }
     },
   },

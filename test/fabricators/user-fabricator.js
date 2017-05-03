@@ -1,8 +1,8 @@
 import { Factory } from 'rosie';
 import faker from 'faker';
-import sequelizeFixtures from 'sequelize-fixtures';
 
-import db from '../../src/models';
+import create from './create';
+import User from '../../src/models/user';
 
 Factory.define('user').attrs({
   firstName: faker.name.firstName,
@@ -12,11 +12,6 @@ Factory.define('user').attrs({
 });
 
 export default function UserFabricator (features = {}) {
-  const fixture = {
-    model: 'User',
-    buildOptions: { isNewRecord: true },
-    data: Factory.build('user', features),
-  };
-
-  return sequelizeFixtures.loadFixtures([fixture], db);
+  const user = Factory.build('user', features);
+  return create({ Class: User, table: 'Users', record: user });
 }

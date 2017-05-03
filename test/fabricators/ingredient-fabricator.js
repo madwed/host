@@ -1,8 +1,8 @@
 import { Factory } from 'rosie';
 import faker from 'faker';
-import sequelizeFixtures from 'sequelize-fixtures';
 
-import db from '../../src/models';
+import create from './create';
+import Ingredient from '../../src/models/ingredient';
 
 Factory.define('ingredient').attrs({
   displayOrder: undefined,
@@ -11,13 +11,13 @@ Factory.define('ingredient').attrs({
 });
 
 export default function IngredientFabricator (features = {}) {
-  const fixture = {
-    model: 'Ingredient',
-    buildOptions: { isNewRecord: true },
-    data: Factory.build('ingredient', features),
-  };
+  const ingredient = Factory.build('ingredient', features);
 
-  return sequelizeFixtures.loadFixtures([fixture], db);
+  return create({
+    Class: Ingredient,
+    table: 'Ingredients',
+    record: ingredient,
+  });
 }
 
 IngredientFabricator.build = function (features = {}) {

@@ -1,39 +1,40 @@
-'use strict';
+require('../../config/aws');
 
-import Sequelize from 'sequelize';
-import path from 'path';
+import AWS from 'aws-sdk';
 
-import configOptions from '../../config/config.json';
+const docClient = new AWS.DynamoDB.DocumentClient();
 
-import Direction from './direction';
-import DirectionSet from './direction-set';
-import Ingredient from './ingredient';
-import IngredientSet from './ingredient-set';
-import Recipe from './recipe';
-import User from './user';
+class DynamoDB {
+  constructor(client) {
+    this.client = client;
+  }
 
-const env = process.env.NODE_ENV || 'development';
-const config = configOptions[env];
+  get(params) {
+    return new Promise((resolve, reject) => {
+      this.client.get(params, (err, data) => {
+        if (err) { reject(err); }
+        resolve(data);
+      });
+    });
+  }
 
-let db = {
-  sequelize: new Sequelize(config.database, config.username, config.password, config),
-};
+  update(params) {
+    return new Promise((resolve, reject) => {
+      this.client.update(params, (err, data) => {
+        if (err) { reject(err); }
+        resolve(data);
+      });
+    });
+  }
 
-const models = {
-  Direction,
-  DirectionSet,
-  Ingredient,
-  IngredientSet,
-  Recipe,
-  User,
-};
+  query(params) {
+    return new Promise((resolve, reject) => {
+      this.client.query(params, (err, data) => {
+        if (err) { reject(err); }
+        resolve(data);
+      });
+    });
+  }
+}
 
-Object.keys(models).forEach(modelName => {
-  db[modelName] = models[modelName](db.sequelize);
-});
-
-Object.keys(models).forEach(modelName => {
-  if (db[modelName].associate) { db[modelName].associate(db); }
-});
-
-export default db;
+export default new DynamoDB(docClient);

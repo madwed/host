@@ -1,8 +1,8 @@
 import { Factory } from 'rosie';
 import faker from 'faker';
-import sequelizeFixtures from 'sequelize-fixtures';
 
-import db from '../../src/models';
+import create from './create';
+import Direction from '../../src/models/direction';
 
 Factory.define('direction').attrs({
   displayOrder: undefined,
@@ -10,13 +10,8 @@ Factory.define('direction').attrs({
 });
 
 export default function DirectionFabricator (features = {}) {
-  const fixture = {
-    model: 'Direction',
-    buildOptions: { isNewRecord: true },
-    data: Factory.build('direction', features),
-  };
-
-  return sequelizeFixtures.loadFixtures([fixture], db);
+  const direction = Factory.build('direction', features);
+  return create({ Class: Direction, table: 'Directions', record: direction });
 }
 
 DirectionFabricator.build = function (features = {}) {

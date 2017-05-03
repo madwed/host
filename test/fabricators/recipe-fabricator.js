@@ -1,11 +1,10 @@
 import { Factory } from 'rosie';
 import faker from 'faker';
-import sequelizeFixtures from 'sequelize-fixtures';
-
 import random from 'lodash.random';
 import sample from 'lodash.sample';
 
-import db from '../../src/models';
+import create from './create';
+import Recipe from '../../src/models/recipe';
 
 Factory.define('recipe').attrs({
   activeTime: '1.5 hours',
@@ -26,13 +25,8 @@ Factory.define('recipe').attrs({
 });
 
 export default function RecipeFabricator (features = {}) {
-  const fixture = {
-    model: 'Recipe',
-    buildOptions: { isNewRecord: true },
-    data: Factory.build('recipe', features),
-  };
-
-  return sequelizeFixtures.loadFixtures([fixture], db);
+  const recipe = Factory.build('recipe', features);
+  return create({ Class: Recipe, table: 'Recipes', record: recipe });
 }
 
 RecipeFabricator.build = function (features = {}) {
